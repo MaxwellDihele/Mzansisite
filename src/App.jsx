@@ -1892,9 +1892,20 @@ export default function App() {
   );
 }
 
+
 function InnerApp() {
   const { theme, toast } = useApp();
   return (
     <>
       <GlobalStyles theme={theme} />
-      <div style={{ minHeight:"100v…
+      <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column" }}>
+        <Navbar />
+        <main style={{ flex:1 }}>
+          <Router />
+        </main>
+        <Footer />
+        <Toast toast={toast} />
+      </div>
+    </>
+  );
+      }
