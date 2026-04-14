@@ -126,7 +126,7 @@ const GlobalStyles = ({ theme }) => {
         --shadow-sm: ${dark ? "0 2px 8px rgba(0,0,0,0.4)" : "0 2px 8px rgba(0,0,0,0.08)"};
       }
       html { font-size: 16px; scroll-behavior: smooth; }
-      body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; line-height: 1.5; min-height: 100vh; overflow-x: hidden; }
+      body { -webkit-user-select: none; -ms-user-select: none; user-select: none; background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; line-height: 1.5; min-height: 100vh; overflow-x: hidden; }
       h1,h2,h3 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.04em; line-height: 1.1; }
       h4,h5,h6 { font-family: 'Outfit', sans-serif; font-weight: 600; }
       a { color: inherit; text-decoration: none; }
