@@ -40,7 +40,6 @@ const USERS_SEED = [
 
 // ─── APP CONTEXT ──────────────────────────────────────────────────────────────
 const AppContext = createContext(null);
-
 const useApp = () => useContext(AppContext);
 
 function AppProvider({ children }) {
@@ -54,28 +53,23 @@ function AppProvider({ children }) {
   const [toast, setToast] = useState(null);
 
   const navigate = useCallback((p, params = {}) => {
-    setPage(p);
-    setPageParams(params);
-    window.scrollTo(0, 0);
+    setPage(p); setPageParams(params); window.scrollTo(0, 0);
   }, []);
 
   const showToast = useCallback((msg, type = "success") => {
-    setToast({ msg, type });
-    setTimeout(() => setToast(null), 3000);
+    setToast({ msg, type }); setTimeout(() => setToast(null), 3000);
   }, []);
 
   const login = useCallback((email, password) => {
     const u = users.find(u => u.email === email && u.password === password);
-    if (u) { setUser(u); return true; }
-    return false;
+    if (u) { setUser(u); return true; } return false;
   }, [users]);
 
   const logout = useCallback(() => { setUser(null); navigate("home"); }, [navigate]);
 
   const addProduct = useCallback((prod) => {
     const np = { ...prod, id: "p" + Date.now(), created_at: new Date().toISOString().split("T")[0], views: 0 };
-    setProducts(prev => [np, ...prev]);
-    return np;
+    setProducts(prev => [np, ...prev]); return np;
   }, []);
 
   const updateProduct = useCallback((id, data) => {
@@ -158,13 +152,12 @@ const GlobalStyles = ({ theme }) => {
   );
 };
 
-// ─── MATERIAL ICON COMPONENT ─────────────────────────────────────────────────
+// ─── ICON ─────────────────────────────────────────────────────────────────────
 const Icon = ({ name, size=20, color, style:sx={} }) => (
   <span className="material-icons-round" style={{ fontSize:size, color: color || "inherit", lineHeight:1, display:"inline-flex", alignItems:"center", justifyContent:"center", flexShrink:0, userSelect:"none", ...sx }}>{name}</span>
 );
 
 // ─── SHARED COMPONENTS ────────────────────────────────────────────────────────
-
 const Badge = ({ status }) => {
   const map = {
     featured: { label: "Featured", icon: "star", bg: "#f5b800", color: "#000" },
@@ -260,10 +253,6 @@ const Toast = ({ toast }) => {
   );
 };
 
-const Spinner = () => (
-  <div style={{ width:32, height:32, border:"3px solid var(--border)", borderTopColor:"var(--accent)", borderRadius:"50%", animation:"spin 0.7s linear infinite" }} />
-);
-
 const EmptyState = ({ icon, title, sub, action }) => (
   <div style={{ textAlign:"center", padding:"60px 20px", display:"flex", flexDirection:"column", alignItems:"center", gap:16 }}>
     <div style={{ display:"flex", alignItems:"center", justifyContent:"center", width:72, height:72, borderRadius:"50%", background:"var(--bg3)" }}>
@@ -301,9 +290,7 @@ const ProductCard = ({ product }) => {
       </div>
       <div style={{ padding:"12px 14px 14px", flex:1, display:"flex", flexDirection:"column", gap:6 }}>
         <div style={{ display:"flex", alignItems:"center", gap:6 }}>
-          {brand && (
-            <img src={brand.logo} alt={brand.name} style={{ width:18, height:18, borderRadius:"50%", flexShrink:0 }} />
-          )}
+          {brand && <img src={brand.logo} alt={brand.name} style={{ width:18, height:18, borderRadius:"50%", flexShrink:0 }} />}
           <span style={{ fontSize:"0.72rem", color:"var(--text2)", fontWeight:500, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{brand?.name}</span>
           {brand && <Badge status={brand.status} />}
         </div>
@@ -343,8 +330,6 @@ const BrandCard = ({ brand }) => {
 };
 
 // ─── NAVBAR ───────────────────────────────────────────────────────────────────
-
-/* Shared icon-button for navbar — 44×44 touch target */
 const NavIconBtn = ({ iconName, onClick, badge, style: sx = {} }) => (
   <button
     onClick={onClick}
@@ -368,18 +353,16 @@ const NavIconBtn = ({ iconName, onClick, badge, style: sx = {} }) => (
 
 const Navbar = () => {
   const { navigate, page, user, logout, theme, setTheme } = useApp();
-  const [drawerOpen, setDrawerOpen]   = useState(false);
-  const [searchOpen, setSearchOpen]   = useState(false);
-  const [searchVal,  setSearchVal]    = useState("");
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchVal, setSearchVal] = useState("");
   const searchInputRef = useRef(null);
 
-  // lock body scroll when drawer is open
   useEffect(() => {
     document.body.style.overflow = drawerOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [drawerOpen]);
 
-  // auto-focus search input when overlay opens
   useEffect(() => {
     if (searchOpen && searchInputRef.current) {
       setTimeout(() => searchInputRef.current?.focus(), 80);
@@ -391,329 +374,180 @@ const Navbar = () => {
   const handleSearch = (e) => {
     if ((e.key === "Enter" || e.type === "click") && searchVal.trim()) {
       navigate("search", { q: searchVal.trim() });
-      setSearchVal("");
-      closeAll();
+      setSearchVal(""); closeAll();
     }
   };
 
   const navLinks = [
-    { label: "Home",       page: "home",       icon: "home" },
-    { label: "Brands",     page: "brands",     icon: "storefront" },
+    { label: "Home", page: "home", icon: "home" },
+    { label: "Brands", page: "brands", icon: "storefront" },
     { label: "Categories", page: "categories", icon: "category" },
-    { label: "Search",     page: "search",     icon: "search" },
+    { label: "Search", page: "search", icon: "search" },
   ];
 
   return (
     <>
-      {/* ── Main bar ─────────────────────────────────────────────────────── */}
-      <nav style={{
-        position: "sticky", top: 0, zIndex: 200,
-        background: "var(--bg)", borderBottom: "1px solid var(--border)",
-        backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)",
-      }}>
-        <div style={{
-          maxWidth: 1200, margin: "0 auto", padding: "0 12px",
-          display: "flex", alignItems: "center", height: 58, gap: 4,
-        }}>
-
-          {/* Logo */}
-          <div
-            onClick={() => { navigate("home"); closeAll(); }}
-            style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", flexShrink: 0, marginRight: 4 }}
-          >
-            <div style={{
-              background: "var(--accent)", borderRadius: 9, width: 34, height: 34,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontFamily: "'Bebas Neue'", fontSize: "1.15rem", color: "#fff", letterSpacing: "0.05em",
-            }}>M</div>
-            {/* Wordmark — hidden below 600 px */}
-            <span style={{
-              fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.25rem",
-              letterSpacing: "0.07em", color: "var(--text)",
-              display: "none",
-            }} className="nav-wordmark">MzansiStreet</span>
+      <nav style={{ position:"sticky", top:0, zIndex:200, background:"var(--bg)", borderBottom:"1px solid var(--border)", backdropFilter:"blur(24px)", WebkitBackdropFilter:"blur(24px)" }}>
+        <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 12px", display:"flex", alignItems:"center", height:58, gap:4 }}>
+          <div onClick={() => { navigate("home"); closeAll(); }} style={{ display:"flex", alignItems:"center", gap:8, cursor:"pointer", flexShrink:0, marginRight:4 }}>
+            <div style={{ background:"var(--accent)", borderRadius:9, width:34, height:34, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"'Bebas Neue'", fontSize:"1.15rem", color:"#fff", letterSpacing:"0.05em" }}>M</div>
+            <span style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:"1.25rem", letterSpacing:"0.07em", color:"var(--text)", display:"none" }} className="nav-wordmark">MzansiStreet</span>
           </div>
 
-          {/* ── Desktop centre nav (≥ 768 px) ────────────────────────────── */}
-          <div className="desktop-nav" style={{ display: "none", gap: 2, flex: 1 }}>
+          <div className="desktop-nav" style={{ display:"none", gap:2, flex:1 }}>
             {navLinks.filter(l => l.page !== "search").map(l => (
               <button key={l.page} onClick={() => navigate(l.page)}
-                style={{
-                  background: "none", border: "none", cursor: "pointer",
-                  color: page === l.page ? "var(--accent)" : "var(--text2)",
-                  fontWeight: 600, fontSize: "0.875rem", padding: "8px 14px",
-                  borderRadius: 8, transition: "color 0.2s",
-                  borderBottom: page === l.page ? "2px solid var(--accent)" : "2px solid transparent",
-                }}>
+                style={{ background:"none", border:"none", cursor:"pointer", color: page === l.page ? "var(--accent)" : "var(--text2)", fontWeight:600, fontSize:"0.875rem", padding:"8px 14px", borderRadius:8, transition:"color 0.2s", borderBottom: page === l.page ? "2px solid var(--accent)" : "2px solid transparent" }}>
                 {l.label}
               </button>
             ))}
           </div>
 
-          {/* ── Desktop search bar (≥ 768 px) ────────────────────────────── */}
-          <div className="desktop-search" style={{ display: "none", flex: 1, maxWidth: 340, position: "relative", margin: "0 8px" }}>
-            <input
-              value={searchVal} onChange={e => setSearchVal(e.target.value)} onKeyDown={handleSearch}
+          <div className="desktop-search" style={{ display:"none", flex:1, maxWidth:340, position:"relative", margin:"0 8px" }}>
+            <input value={searchVal} onChange={e => setSearchVal(e.target.value)} onKeyDown={handleSearch}
               placeholder="Search products, brands…"
-              style={{
-                width: "100%", background: "var(--bg3)", border: "1px solid var(--border2)",
-                borderRadius: 99, padding: "8px 16px 8px 38px",
-                color: "var(--text)", fontSize: "0.875rem", outline: "none",
-              }}
-            />
-            <span style={{ position: "absolute", left: 11, top: "50%", transform: "translateY(-50%)", display: "flex" }}>
+              style={{ width:"100%", background:"var(--bg3)", border:"1px solid var(--border2)", borderRadius:99, padding:"8px 16px 8px 38px", color:"var(--text)", fontSize:"0.875rem", outline:"none" }} />
+            <span style={{ position:"absolute", left:11, top:"50%", transform:"translateY(-50%)", display:"flex" }}>
               <Icon name="search" size={17} color="var(--text3)" />
             </span>
           </div>
 
-          {/* ── Right cluster ─────────────────────────────────────────────── */}
-          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 2 }}>
-
-            {/* Search icon — mobile only */}
+          <div style={{ marginLeft:"auto", display:"flex", alignItems:"center", gap:2 }}>
             <div className="mobile-only">
               <NavIconBtn iconName="search" onClick={() => { setSearchOpen(true); setDrawerOpen(false); }} />
             </div>
-
-            {/* Theme toggle */}
-            <NavIconBtn
-              iconName={theme === "dark" ? "light_mode" : "dark_mode"}
-              onClick={() => setTheme(t => t === "dark" ? "light" : "dark")}
-            />
-
-            {/* Signed-in user pill — desktop */}
+            <NavIconBtn iconName={theme === "dark" ? "light_mode" : "dark_mode"} onClick={() => setTheme(t => t === "dark" ? "light" : "dark")} />
             {user && (
-              <button
-                className="desktop-nav"
-                onClick={() => navigate(user.role === "admin" ? "admin" : "dashboard")}
-                style={{
-                  display: "none", alignItems: "center", gap: 6,
-                  background: "var(--accent)", border: "none", borderRadius: 9,
-                  padding: "6px 14px", color: "#fff", fontWeight: 600,
-                  fontSize: "0.85rem", cursor: "pointer",
-                }}>
-                <Icon name="person" size={16} color="#fff" />
-                {user.name.split(" ")[0]}
+              <button className="desktop-nav" onClick={() => navigate(user.role === "admin" ? "admin" : "dashboard")}
+                style={{ display:"none", alignItems:"center", gap:6, background:"var(--accent)", border:"none", borderRadius:9, padding:"6px 14px", color:"#fff", fontWeight:600, fontSize:"0.85rem", cursor:"pointer" }}>
+                <Icon name="person" size={16} color="#fff" />{user.name.split(" ")[0]}
               </button>
             )}
-
-            {/* Sign in — desktop only, not logged in */}
             {!user && (
-              <div className="desktop-nav" style={{ display: "none" }}>
+              <div className="desktop-nav" style={{ display:"none" }}>
                 <Btn size="sm" onClick={() => navigate("login")}>Sign In</Btn>
               </div>
             )}
-
-            {/* Hamburger — mobile only */}
             <div className="mobile-only">
-              <NavIconBtn
-                iconName={drawerOpen ? "close" : "menu"}
-                onClick={() => { setDrawerOpen(d => !d); setSearchOpen(false); }}
-                badge={!!user}
-              />
+              <NavIconBtn iconName={drawerOpen ? "close" : "menu"} onClick={() => { setDrawerOpen(d => !d); setSearchOpen(false); }} badge={!!user} />
             </div>
           </div>
         </div>
       </nav>
 
-      {/* ── Mobile full-width search overlay ─────────────────────────────── */}
+      {/* Mobile search overlay */}
       {searchOpen && (
-        <div style={{
-          position: "fixed", inset: 0, zIndex: 300,
-          background: "var(--bg)", display: "flex", flexDirection: "column",
-          animation: "slideDown 0.2s ease",
-        }}>
-          {/* Header row */}
-          <div style={{
-            display: "flex", alignItems: "center", gap: 10,
-            padding: "10px 12px", borderBottom: "1px solid var(--border)", height: 58,
-          }}>
-            <div style={{
-              flex: 1, display: "flex", alignItems: "center", gap: 10,
-              background: "var(--bg3)", borderRadius: 12,
-              border: "1px solid var(--accent)", padding: "0 14px",
-            }}>
+        <div style={{ position:"fixed", inset:0, zIndex:300, background:"var(--bg)", display:"flex", flexDirection:"column", animation:"slideDown 0.2s ease" }}>
+          <div style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 12px", borderBottom:"1px solid var(--border)", height:58 }}>
+            <div style={{ flex:1, display:"flex", alignItems:"center", gap:10, background:"var(--bg3)", borderRadius:12, border:"1px solid var(--accent)", padding:"0 14px" }}>
               <Icon name="search" size={20} color="var(--accent)" />
-              <input
-                ref={searchInputRef}
-                value={searchVal}
-                onChange={e => setSearchVal(e.target.value)}
-                onKeyDown={handleSearch}
+              <input ref={searchInputRef} value={searchVal} onChange={e => setSearchVal(e.target.value)} onKeyDown={handleSearch}
                 placeholder="Search products, brands…"
-                style={{
-                  flex: 1, background: "none", border: "none", outline: "none",
-                  color: "var(--text)", fontSize: "1rem", padding: "12px 0",
-                }}
-              />
+                style={{ flex:1, background:"none", border:"none", outline:"none", color:"var(--text)", fontSize:"1rem", padding:"12px 0" }} />
               {searchVal && (
-                <button onClick={() => setSearchVal("")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", padding: 4 }}>
+                <button onClick={() => setSearchVal("")} style={{ background:"none", border:"none", cursor:"pointer", display:"flex", alignItems:"center", padding:4 }}>
                   <Icon name="cancel" size={18} color="var(--text3)" />
                 </button>
               )}
             </div>
-            <button
-              onClick={() => { setSearchOpen(false); setSearchVal(""); }}
-              style={{ background: "none", border: "none", cursor: "pointer", color: "var(--accent)", fontWeight: 600, fontSize: "0.95rem", padding: "8px 4px", whiteSpace: "nowrap" }}>
-              Cancel
-            </button>
+            <button onClick={() => { setSearchOpen(false); setSearchVal(""); }}
+              style={{ background:"none", border:"none", cursor:"pointer", color:"var(--accent)", fontWeight:600, fontSize:"0.95rem", padding:"8px 4px", whiteSpace:"nowrap" }}>Cancel</button>
           </div>
-
-          {/* Quick category chips */}
-          <div style={{ padding: "16px 12px 8px", borderBottom: "1px solid var(--border)" }}>
-            <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text3)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 10 }}>Browse Categories</div>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <div style={{ padding:"16px 12px 8px", borderBottom:"1px solid var(--border)" }}>
+            <div style={{ fontSize:"0.75rem", fontWeight:700, color:"var(--text3)", textTransform:"uppercase", letterSpacing:"0.1em", marginBottom:10 }}>Browse Categories</div>
+            <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
               {CATEGORIES.map(cat => (
                 <button key={cat} onClick={() => { navigate("search", { category: cat }); closeAll(); setSearchVal(""); }}
-                  style={{
-                    padding: "7px 14px", borderRadius: 99,
-                    border: "1px solid var(--border2)", background: "var(--bg3)",
-                    color: "var(--text2)", fontSize: "0.82rem", fontWeight: 600,
-                    cursor: "pointer", WebkitTapHighlightColor: "transparent",
-                  }}>
+                  style={{ padding:"7px 14px", borderRadius:99, border:"1px solid var(--border2)", background:"var(--bg3)", color:"var(--text2)", fontSize:"0.82rem", fontWeight:600, cursor:"pointer", WebkitTapHighlightColor:"transparent" }}>
                   {cat}
                 </button>
               ))}
             </div>
           </div>
-
-          {/* Search CTA */}
           {searchVal.trim() && (
-            <div style={{ padding: "16px 12px" }}>
-              <button
-                onClick={handleSearch}
-                style={{
-                  width: "100%", padding: "14px", borderRadius: 12,
-                  background: "var(--accent)", border: "none",
-                  color: "#fff", fontWeight: 700, fontSize: "1rem",
-                  cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                }}>
-                <Icon name="search" size={20} color="#fff" />
-                Search "{searchVal}"
+            <div style={{ padding:"16px 12px" }}>
+              <button onClick={handleSearch}
+                style={{ width:"100%", padding:"14px", borderRadius:12, background:"var(--accent)", border:"none", color:"#fff", fontWeight:700, fontSize:"1rem", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:8 }}>
+                <Icon name="search" size={20} color="#fff" />Search "{searchVal}"
               </button>
             </div>
           )}
         </div>
       )}
 
-      {/* ── Mobile slide-out drawer ───────────────────────────────────────── */}
-      {/* Backdrop */}
+      {/* Drawer backdrop */}
       {drawerOpen && (
-        <div
-          onClick={() => setDrawerOpen(false)}
-          style={{
-            position: "fixed", inset: 0, zIndex: 250,
-            background: "rgba(0,0,0,0.6)", animation: "fadeIn 0.2s ease",
-          }}
-        />
+        <div onClick={() => setDrawerOpen(false)}
+          style={{ position:"fixed", inset:0, zIndex:250, background:"rgba(0,0,0,0.6)", animation:"fadeIn 0.2s ease" }} />
       )}
 
       {/* Drawer panel */}
       <div style={{
-        position: "fixed", top: 0, right: 0, bottom: 0, zIndex: 260,
-        width: "min(300px, 85vw)",
-        background: "var(--card)", borderLeft: "1px solid var(--border)",
-        display: "flex", flexDirection: "column",
+        position:"fixed", top:0, right:0, bottom:0, zIndex:260,
+        width:"min(300px, 85vw)", background:"var(--card)", borderLeft:"1px solid var(--border)",
+        display:"flex", flexDirection:"column",
         transform: drawerOpen ? "translateX(0)" : "translateX(100%)",
-        transition: "transform 0.28s cubic-bezier(0.4,0,0.2,1)",
-        overflowY: "auto",
+        transition:"transform 0.28s cubic-bezier(0.4,0,0.2,1)", overflowY:"auto",
       }}>
-        {/* Drawer header */}
-        <div style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          padding: "14px 16px", borderBottom: "1px solid var(--border)", height: 58,
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <div style={{ background: "var(--accent)", borderRadius: 8, width: 30, height: 30, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue'", fontSize: "1rem", color: "#fff" }}>M</div>
-            <span style={{ fontFamily: "'Bebas Neue'", fontSize: "1.1rem", letterSpacing: "0.06em" }}>MzansiStreet</span>
+        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"14px 16px", borderBottom:"1px solid var(--border)", height:58 }}>
+          <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+            <div style={{ background:"var(--accent)", borderRadius:8, width:30, height:30, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"'Bebas Neue'", fontSize:"1rem", color:"#fff" }}>M</div>
+            <span style={{ fontFamily:"'Bebas Neue'", fontSize:"1.1rem", letterSpacing:"0.06em" }}>MzansiStreet</span>
           </div>
           <NavIconBtn iconName="close" onClick={() => setDrawerOpen(false)} />
         </div>
 
-        {/* User block */}
         {user ? (
-          <div style={{ padding: "16px", borderBottom: "1px solid var(--border)", background: "var(--bg2)" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <div style={{ width: 44, height: 44, borderRadius: 12, background: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ padding:"16px", borderBottom:"1px solid var(--border)", background:"var(--bg2)" }}>
+            <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+              <div style={{ width:44, height:44, borderRadius:12, background:"var(--accent)", display:"flex", alignItems:"center", justifyContent:"center" }}>
                 <Icon name="person" size={22} color="#fff" />
               </div>
               <div>
-                <div style={{ fontWeight: 700, fontSize: "0.95rem" }}>{user.name}</div>
-                <div style={{ fontSize: "0.75rem", color: "var(--text2)", textTransform: "capitalize" }}>{user.role}</div>
+                <div style={{ fontWeight:700, fontSize:"0.95rem" }}>{user.name}</div>
+                <div style={{ fontSize:"0.75rem", color:"var(--text2)", textTransform:"capitalize" }}>{user.role}</div>
               </div>
             </div>
           </div>
         ) : (
-          <div style={{ padding: "16px", borderBottom: "1px solid var(--border)" }}>
-            <button
-              onClick={() => { navigate("login"); closeAll(); }}
-              style={{
-                width: "100%", padding: "13px", borderRadius: 12,
-                background: "var(--accent)", border: "none",
-                color: "#fff", fontWeight: 700, fontSize: "0.95rem",
-                cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-              }}>
+          <div style={{ padding:"16px", borderBottom:"1px solid var(--border)" }}>
+            <button onClick={() => { navigate("login"); closeAll(); }}
+              style={{ width:"100%", padding:"13px", borderRadius:12, background:"var(--accent)", border:"none", color:"#fff", fontWeight:700, fontSize:"0.95rem", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:8 }}>
               <Icon name="login" size={18} color="#fff" /> Sign In as Seller
             </button>
           </div>
         )}
 
-        {/* Nav links */}
-        <div style={{ flex: 1, padding: "10px 8px" }}>
-          <div style={{ fontSize: "0.7rem", fontWeight: 700, color: "var(--text3)", textTransform: "uppercase", letterSpacing: "0.12em", padding: "8px 10px 6px" }}>Discover</div>
+        <div style={{ flex:1, padding:"10px 8px" }}>
+          <div style={{ fontSize:"0.7rem", fontWeight:700, color:"var(--text3)", textTransform:"uppercase", letterSpacing:"0.12em", padding:"8px 10px 6px" }}>Discover</div>
           {navLinks.map(l => (
-            <DrawerLink
-              key={l.page}
-              label={l.label}
-              icon={l.icon}
-              active={page === l.page}
-              onClick={() => { navigate(l.page); closeAll(); }}
-            />
+            <DrawerLink key={l.page} label={l.label} icon={l.icon} active={page === l.page} onClick={() => { navigate(l.page); closeAll(); }} />
           ))}
-
-          {/* Authenticated links */}
           {user && (
             <>
-              <div style={{ borderTop: "1px solid var(--border)", margin: "10px 0 6px" }} />
-              <div style={{ fontSize: "0.7rem", fontWeight: 700, color: "var(--text3)", textTransform: "uppercase", letterSpacing: "0.12em", padding: "2px 10px 6px" }}>Account</div>
-              {user.role === "seller" && (
-                <DrawerLink label="Seller Dashboard" icon="dashboard" active={page === "dashboard"} onClick={() => { navigate("dashboard"); closeAll(); }} />
-              )}
-              {user.role === "admin" && (
-                <DrawerLink label="Admin Panel" icon="admin_panel_settings" active={page === "admin"} onClick={() => { navigate("admin"); closeAll(); }} />
-              )}
+              <div style={{ borderTop:"1px solid var(--border)", margin:"10px 0 6px" }} />
+              <div style={{ fontSize:"0.7rem", fontWeight:700, color:"var(--text3)", textTransform:"uppercase", letterSpacing:"0.12em", padding:"2px 10px 6px" }}>Account</div>
+              {user.role === "seller" && <DrawerLink label="Seller Dashboard" icon="dashboard" active={page === "dashboard"} onClick={() => { navigate("dashboard"); closeAll(); }} />}
+              {user.role === "admin" && <DrawerLink label="Admin Panel" icon="admin_panel_settings" active={page === "admin"} onClick={() => { navigate("admin"); closeAll(); }} />}
             </>
           )}
         </div>
 
-        {/* Footer row */}
-        <div style={{ padding: "12px 16px 20px", borderTop: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <button
-            onClick={() => setTheme(t => t === "dark" ? "light" : "dark")}
-            style={{
-              display: "flex", alignItems: "center", gap: 8,
-              background: "var(--bg3)", border: "1px solid var(--border2)",
-              borderRadius: 10, padding: "10px 14px", cursor: "pointer",
-              color: "var(--text)", fontWeight: 600, fontSize: "0.85rem",
-            }}>
+        <div style={{ padding:"12px 16px 20px", borderTop:"1px solid var(--border)", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+          <button onClick={() => setTheme(t => t === "dark" ? "light" : "dark")}
+            style={{ display:"flex", alignItems:"center", gap:8, background:"var(--bg3)", border:"1px solid var(--border2)", borderRadius:10, padding:"10px 14px", cursor:"pointer", color:"var(--text)", fontWeight:600, fontSize:"0.85rem" }}>
             <Icon name={theme === "dark" ? "light_mode" : "dark_mode"} size={18} />
             {theme === "dark" ? "Light mode" : "Dark mode"}
           </button>
-
           {user && (
-            <button
-              onClick={() => { logout(); closeAll(); }}
-              style={{
-                display: "flex", alignItems: "center", gap: 6,
-                background: "#ff336618", border: "1px solid #ff336633",
-                borderRadius: 10, padding: "10px 14px", cursor: "pointer",
-                color: "#ff3366", fontWeight: 600, fontSize: "0.85rem",
-              }}>
+            <button onClick={() => { logout(); closeAll(); }}
+              style={{ display:"flex", alignItems:"center", gap:6, background:"#ff336618", border:"1px solid #ff336633", borderRadius:10, padding:"10px 14px", cursor:"pointer", color:"#ff3366", fontWeight:600, fontSize:"0.85rem" }}>
               <Icon name="logout" size={16} color="#ff3366" /> Log out
             </button>
           )}
         </div>
       </div>
 
-      {/* ── Responsive style injection ───────────────────────────────────── */}
       <style>{`
         @media (min-width: 768px) {
           .desktop-nav  { display: flex !important; }
@@ -731,21 +565,9 @@ const Navbar = () => {
   );
 };
 
-/* Drawer nav row */
 const DrawerLink = ({ label, icon, active, onClick }) => (
-  <button
-    onClick={onClick}
-    style={{
-      display: "flex", alignItems: "center", gap: 14, width: "100%",
-      padding: "13px 12px", borderRadius: 10, border: "none",
-      background: active ? "var(--accent)18" : "transparent",
-      color: active ? "var(--accent)" : "var(--text)",
-      fontWeight: active ? 700 : 500, fontSize: "0.95rem",
-      cursor: "pointer", textAlign: "left",
-      borderLeft: active ? "3px solid var(--accent)" : "3px solid transparent",
-      transition: "background 0.15s",
-      WebkitTapHighlightColor: "transparent",
-    }}
+  <button onClick={onClick}
+    style={{ display:"flex", alignItems:"center", gap:14, width:"100%", padding:"13px 12px", borderRadius:10, border:"none", background: active ? "var(--accent)18" : "transparent", color: active ? "var(--accent)" : "var(--text)", fontWeight: active ? 700 : 500, fontSize:"0.95rem", cursor:"pointer", textAlign:"left", borderLeft: active ? "3px solid var(--accent)" : "3px solid transparent", transition:"background 0.15s", WebkitTapHighlightColor:"transparent" }}
     onTouchStart={e => { if (!active) e.currentTarget.style.background = "var(--bg3)"; }}
     onTouchEnd={e => { if (!active) e.currentTarget.style.background = "transparent"; }}
   >
@@ -754,18 +576,8 @@ const DrawerLink = ({ label, icon, active, onClick }) => (
   </button>
 );
 
-const MenuItem = ({ label, icon, onClick }) => (
-  <button onClick={onClick} style={{ display:"flex", alignItems:"center", gap:8, width:"100%", padding:"8px 12px", borderRadius:8, background:"none", border:"none", color:"var(--text)", fontSize:"0.85rem", fontWeight:500, cursor:"pointer", textAlign:"left" }}
-    onMouseEnter={e => e.currentTarget.style.background="var(--bg3)"}
-    onMouseLeave={e => e.currentTarget.style.background="none"}
-  >
-    <Icon name={icon} size={16} color="var(--text2)" /> {label}
-  </button>
-);
-
 // ─── PAGES ────────────────────────────────────────────────────────────────────
 
-// HOME PAGE
 const HomePage = () => {
   const { products, brands, navigate } = useApp();
   const featured = brands.filter(b => b.status === "featured");
@@ -774,12 +586,11 @@ const HomePage = () => {
 
   return (
     <div className="fade-in">
-      {/* Hero */}
       <section style={{ background:"linear-gradient(135deg, var(--bg) 0%, var(--bg2) 100%)", padding:"60px 16px", position:"relative", overflow:"hidden" }}>
         <div style={{ position:"absolute", top:-60, right:-60, width:300, height:300, borderRadius:"50%", background:"var(--accent)", opacity:0.06, filter:"blur(80px)" }} />
         <div style={{ position:"absolute", bottom:-80, left:-40, width:250, height:250, borderRadius:"50%", background:"var(--accent2)", opacity:0.06, filter:"blur(80px)" }} />
         <div style={{ maxWidth:1200, margin:"0 auto", position:"relative" }}>
-        <div style={{ fontSize:"0.8rem", color:"var(--accent)", fontWeight:700, letterSpacing:"0.15em", textTransform:"uppercase", marginBottom:12, display:"flex", alignItems:"center", gap:6 }}>
+          <div style={{ fontSize:"0.8rem", color:"var(--accent)", fontWeight:700, letterSpacing:"0.15em", textTransform:"uppercase", marginBottom:12, display:"flex", alignItems:"center", gap:6 }}>
             <Icon name="location_on" size={16} color="var(--accent)" />South Africa's Local Brand Marketplace
           </div>
           <h1 style={{ fontSize:"clamp(2.8rem, 8vw, 5.5rem)", color:"var(--text)", marginBottom:16, lineHeight:1 }}>
@@ -803,7 +614,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Category strip */}
       <section style={{ borderBottom:"1px solid var(--border)", overflowX:"auto", background:"var(--bg2)" }}>
         <div style={{ display:"flex", gap:0, maxWidth:1200, margin:"0 auto" }}>
           {CATEGORIES.map(cat => (
@@ -811,15 +621,12 @@ const HomePage = () => {
               style={{ padding:"12px 20px", background:"none", border:"none", borderRight:"1px solid var(--border)", color:"var(--text2)", fontSize:"0.8rem", fontWeight:600, cursor:"pointer", whiteSpace:"nowrap", transition:"all 0.2s", flexShrink:0 }}
               onMouseEnter={e => { e.currentTarget.style.background="var(--bg3)"; e.currentTarget.style.color="var(--text)"; }}
               onMouseLeave={e => { e.currentTarget.style.background="none"; e.currentTarget.style.color="var(--text2)"; }}
-            >
-              {cat}
-            </button>
+            >{cat}</button>
           ))}
         </div>
       </section>
 
       <div style={{ maxWidth:1200, margin:"0 auto", padding:"40px 16px" }}>
-        {/* Featured Brands */}
         {featured.length > 0 && (
           <section style={{ marginBottom:48 }}>
             <SectionHeader title="Featured Brands" sub="Premium verified sellers" action={{ label:"All Brands →", onClick: () => navigate("brands") }} />
@@ -828,16 +635,12 @@ const HomePage = () => {
             </div>
           </section>
         )}
-
-        {/* Popular now */}
         <section style={{ marginBottom:48 }}>
           <SectionHeader title="🔥 Trending Now" sub="Most viewed this week" action={{ label:"View All →", onClick: () => navigate("search", { sort:"popular" }) }} />
           <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(200px, 1fr))", gap:16 }}>
             {popular.map(p => <ProductCard key={p.id} product={p} />)}
           </div>
         </section>
-
-        {/* Latest */}
         <section style={{ marginBottom:48 }}>
           <SectionHeader title="Latest Drops" sub="Freshest products" action={{ label:"View All →", onClick: () => navigate("search", { sort:"newest" }) }} />
           <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(200px, 1fr))", gap:16 }}>
@@ -861,7 +664,6 @@ const SectionHeader = ({ title, sub, action }) => (
   </div>
 );
 
-// SEARCH PAGE
 const SearchPage = () => {
   const { products, brands, pageParams, navigate } = useApp();
   const [query, setQuery] = useState(pageParams.q || "");
@@ -892,34 +694,27 @@ const SearchPage = () => {
 
   return (
     <div className="fade-in" style={{ maxWidth:1200, margin:"0 auto", padding:"32px 16px" }}>
-      {/* Search bar */}
       <div style={{ marginBottom:24 }}>
         <h2 style={{ fontSize:"2rem", marginBottom:16 }}>Search</h2>
         <div style={{ display:"flex", gap:12, flexWrap:"wrap" }}>
           <div style={{ flex:"1 1 260px", position:"relative" }}>
             <input value={query} onChange={e => { setQuery(e.target.value); setCurrentPage(1); }}
               placeholder="Search products or brands..."
-              style={{ width:"100%", background:"var(--bg3)", border:"1px solid var(--border2)", borderRadius:12, padding:"12px 16px 12px 42px", color:"var(--text)", fontSize:"0.95rem", outline:"none" }}
-            />
+              style={{ width:"100%", background:"var(--bg3)", border:"1px solid var(--border2)", borderRadius:12, padding:"12px 16px 12px 42px", color:"var(--text)", fontSize:"0.95rem", outline:"none" }} />
             <span style={{ position:"absolute", left:12, top:"50%", transform:"translateY(-50%)", display:"flex" }}><Icon name="search" size={18} color="var(--text3)" /></span>
           </div>
           <Select value={category} onChange={v => { setCategory(v); setCurrentPage(1); }} options={[{value:"",label:"All Categories"}, ...CATEGORIES.map(c => ({value:c,label:c}))]} />
           <Select value={sort} onChange={setSort} options={[{value:"newest",label:"Newest"},{value:"popular",label:"Most Popular"},{value:"price_asc",label:"Price: Low → High"},{value:"price_desc",label:"Price: High → Low"}]} />
         </div>
       </div>
-
-      {/* Tabs */}
       <div style={{ display:"flex", gap:0, borderBottom:"1px solid var(--border)", marginBottom:24 }}>
         {[["products",`Products (${filteredProducts.length})`],["brands",`Brands (${filteredBrands.length})`]].map(([t,l]) => (
           <button key={t} onClick={() => setTab(t)} style={{ padding:"10px 20px", background:"none", border:"none", borderBottom:`2px solid ${tab===t?"var(--accent)":"transparent"}`, color: tab===t ? "var(--accent)" : "var(--text2)", fontWeight:600, fontSize:"0.9rem", cursor:"pointer", transition:"all 0.2s" }}>{l}</button>
         ))}
       </div>
-
       {tab === "products" && (
         <>
-          {paginated.length === 0 ? (
-            <EmptyState icon="search_off" title="No products found" sub="Try adjusting your search or filters" />
-          ) : (
+          {paginated.length === 0 ? <EmptyState icon="search_off" title="No products found" sub="Try adjusting your search or filters" /> : (
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(200px, 1fr))", gap:16, marginBottom:32 }}>
               {paginated.map(p => <ProductCard key={p.id} product={p} />)}
             </div>
@@ -935,7 +730,6 @@ const SearchPage = () => {
           )}
         </>
       )}
-
       {tab === "brands" && (
         <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(260px, 1fr))", gap:16 }}>
           {filteredBrands.length === 0 ? <EmptyState icon="storefront" title="No brands found" sub="Try a different search term" /> :
@@ -946,7 +740,6 @@ const SearchPage = () => {
   );
 };
 
-// PRODUCT PAGE
 const ProductPage = () => {
   const { pageParams, products, brands, navigate } = useApp();
   const product = products.find(p => p.id === pageParams.id);
@@ -962,239 +755,135 @@ const ProductPage = () => {
   return (
     <>
       <style>{`
-        .product-layout {
-          display: flex;
-          flex-direction: column;
-          gap: 0;
+        .product-layout { display:flex; flex-direction:column; gap:0; }
+        .product-gallery-col { width:100%; }
+        .product-detail-col { width:100%; padding:20px 16px 0; }
+        .product-meta-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+        .product-cta-desktop { display:none; }
+        .product-cta-mobile {
+          position:fixed; bottom:0; left:0; right:0; z-index:90;
+          background:var(--bg); border-top:1px solid var(--border);
+          padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+          display:flex; gap:10px;
         }
-        .product-gallery-col { width: 100%; }
-        .product-detail-col  { width: 100%; padding: 20px 16px 0; }
-        .product-meta-grid   { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-        .product-cta-desktop { display: none; }
-        .product-cta-mobile  {
-          position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
-          background: var(--bg);
-          border-top: 1px solid var(--border);
-          padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-          display: flex; gap: 10px;
-        }
-        .product-thumb { width: 56px; height: 56px; }
+        .product-thumb { width:56px; height:56px; }
         @media (min-width: 768px) {
-          .product-layout        { flex-direction: row; align-items: flex-start; gap: 40px; padding: 32px 16px; }
-          .product-gallery-col   { width: 46%; flex-shrink: 0; position: sticky; top: 80px; }
-          .product-detail-col    { flex: 1; padding: 0; }
-          .product-cta-desktop   { display: flex !important; }
-          .product-cta-mobile    { display: none !important; }
-          .product-thumb         { width: 72px; height: 72px; }
+          .product-layout { flex-direction:row; align-items:flex-start; gap:40px; padding:32px 16px; }
+          .product-gallery-col { width:46%; flex-shrink:0; position:sticky; top:80px; }
+          .product-detail-col { flex:1; padding:0; }
+          .product-cta-desktop { display:flex !important; }
+          .product-cta-mobile { display:none !important; }
+          .product-thumb { width:72px; height:72px; }
         }
       `}</style>
 
-      <div className="fade-in" style={{ maxWidth: 1200, margin: "0 auto" }}>
-
-        {/* ── Breadcrumb ──────────────────────────────────────────────────── */}
-        <div style={{
-          display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap",
-          padding: "14px 16px", fontSize: "0.8rem", color: "var(--text2)",
-          borderBottom: "1px solid var(--border)",
-        }}>
-          <span onClick={() => navigate("home")} style={{ cursor: "pointer", color: "var(--accent)", display: "flex", alignItems: "center", gap: 4 }}>
+      <div className="fade-in" style={{ maxWidth:1200, margin:"0 auto" }}>
+        <div style={{ display:"flex", gap:6, alignItems:"center", flexWrap:"wrap", padding:"14px 16px", fontSize:"0.8rem", color:"var(--text2)", borderBottom:"1px solid var(--border)" }}>
+          <span onClick={() => navigate("home")} style={{ cursor:"pointer", color:"var(--accent)", display:"flex", alignItems:"center", gap:4 }}>
             <Icon name="home" size={14} color="var(--accent)" />Home
           </span>
           <Icon name="chevron_right" size={14} color="var(--text3)" />
-          <span onClick={() => navigate("search", { category: product.category })} style={{ cursor: "pointer", color: "var(--accent)" }}>{product.category}</span>
+          <span onClick={() => navigate("search", { category: product.category })} style={{ cursor:"pointer", color:"var(--accent)" }}>{product.category}</span>
           <Icon name="chevron_right" size={14} color="var(--text3)" />
-          <span style={{ color: "var(--text2)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "40vw" }}>{product.name}</span>
+          <span style={{ color:"var(--text2)", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", maxWidth:"40vw" }}>{product.name}</span>
         </div>
 
-        {/* ── Main layout: stacks on mobile, side-by-side on desktop ─────── */}
         <div className="product-layout">
-
-          {/* Gallery column */}
           <div className="product-gallery-col">
-            {/* Main image */}
-            <div style={{
-              aspectRatio: "1/1", overflow: "hidden", background: "var(--bg2)",
-              borderRadius: 0,
-            }}>
-              <img
-                src={product.images[imgIdx]}
-                alt={product.name}
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-              />
+            <div style={{ aspectRatio:"1/1", overflow:"hidden", background:"var(--bg2)" }}>
+              <img src={product.images[imgIdx]} alt={product.name} style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} />
             </div>
-
-            {/* Thumbnails */}
             {product.images.length > 1 && (
-              <div style={{
-                display: "flex", gap: 8, padding: "10px 16px",
-                overflowX: "auto", background: "var(--bg2)",
-                borderBottom: "1px solid var(--border)",
-              }}>
+              <div style={{ display:"flex", gap:8, padding:"10px 16px", overflowX:"auto", background:"var(--bg2)", borderBottom:"1px solid var(--border)" }}>
                 {product.images.map((img, i) => (
-                  <div
-                    key={i}
-                    onClick={() => setImgIdx(i)}
-                    className="product-thumb"
-                    style={{
-                      borderRadius: 8, overflow: "hidden", flexShrink: 0,
-                      cursor: "pointer",
-                      border: `2px solid ${imgIdx === i ? "var(--accent)" : "var(--border)"}`,
-                      opacity: imgIdx === i ? 1 : 0.6,
-                      transition: "border-color 0.2s, opacity 0.2s",
-                    }}
-                  >
-                    <img src={img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                  <div key={i} onClick={() => setImgIdx(i)} className="product-thumb"
+                    style={{ borderRadius:8, overflow:"hidden", flexShrink:0, cursor:"pointer", border:`2px solid ${imgIdx===i?"var(--accent)":"var(--border)"}`, opacity:imgIdx===i?1:0.6, transition:"border-color 0.2s, opacity 0.2s" }}>
+                    <img src={img} alt="" style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} />
                   </div>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Detail column */}
           <div className="product-detail-col">
-
-            {/* Brand row */}
             {brand && (
-              <div
-                onClick={() => navigate("brand", { id: brand.id })}
-                style={{
-                  display: "flex", alignItems: "center", gap: 10,
-                  marginBottom: 14, cursor: "pointer",
-                  padding: "10px 0", borderBottom: "1px solid var(--border)",
-                }}
-              >
-                <img src={brand.logo} alt={brand.name} style={{ width: 36, height: 36, borderRadius: 8, flexShrink: 0 }} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: 700, fontSize: "0.9rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{brand.name}</div>
-                  <div style={{ fontSize: "0.72rem", color: "var(--text3)" }}>View brand profile →</div>
+              <div onClick={() => navigate("brand", { id: brand.id })}
+                style={{ display:"flex", alignItems:"center", gap:10, marginBottom:14, cursor:"pointer", padding:"10px 0", borderBottom:"1px solid var(--border)" }}>
+                <img src={brand.logo} alt={brand.name} style={{ width:36, height:36, borderRadius:8, flexShrink:0 }} />
+                <div style={{ flex:1, minWidth:0 }}>
+                  <div style={{ fontWeight:700, fontSize:"0.9rem", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{brand.name}</div>
+                  <div style={{ fontSize:"0.72rem", color:"var(--text3)" }}>View brand profile →</div>
                 </div>
                 <Badge status={brand.status} />
               </div>
             )}
 
-            {/* Title */}
-            <h1 style={{
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "clamp(2rem, 6vw, 3rem)",
-              lineHeight: 1.05, letterSpacing: "0.03em",
-              color: "var(--text)", marginBottom: 12,
-              wordBreak: "break-word",
-            }}>
+            <h1 style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:"clamp(2rem, 6vw, 3rem)", lineHeight:1.05, letterSpacing:"0.03em", color:"var(--text)", marginBottom:12, wordBreak:"break-word" }}>
               {product.name}
             </h1>
 
-            {/* Price + stock */}
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20, flexWrap: "wrap" }}>
-              <span style={{
-                fontFamily: "'Bebas Neue'", fontSize: "2.4rem",
-                color: "var(--accent)", letterSpacing: "0.04em", lineHeight: 1,
-              }}>
-                R {product.price.toLocaleString()}
-              </span>
+            <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:20, flexWrap:"wrap" }}>
+              <span style={{ fontFamily:"'Bebas Neue'", fontSize:"2.4rem", color:"var(--accent)", letterSpacing:"0.04em", lineHeight:1 }}>R {product.price.toLocaleString()}</span>
               <Badge status={product.stock} />
             </div>
 
-            {/* Description */}
-            <div style={{
-              background: "var(--bg2)", borderRadius: 12,
-              padding: "14px 16px", marginBottom: 18,
-              border: "1px solid var(--border)",
-            }}>
-              <div style={{
-                fontSize: "0.72rem", fontWeight: 700, color: "var(--text3)",
-                textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 8,
-              }}>Description</div>
-              <p style={{ color: "var(--text)", lineHeight: 1.75, fontSize: "0.95rem", margin: 0 }}>
-                {product.description}
-              </p>
+            <div style={{ background:"var(--bg2)", borderRadius:12, padding:"14px 16px", marginBottom:18, border:"1px solid var(--border)" }}>
+              <div style={{ fontSize:"0.72rem", fontWeight:700, color:"var(--text3)", textTransform:"uppercase", letterSpacing:"0.12em", marginBottom:8 }}>Description</div>
+              <p style={{ color:"var(--text)", lineHeight:1.75, fontSize:"0.95rem", margin:0 }}>{product.description}</p>
             </div>
 
-            {/* Meta grid — always 3 equal columns */}
-            <div className="product-meta-grid" style={{ marginBottom: 24 }}>
-              {[
-                ["category",   "Category", product.category],
-                ["event_note", "Listed",   product.created_at],
-                ["visibility", "Views",    product.views.toLocaleString()],
-              ].map(([icon, k, v]) => (
-                <div key={k} style={{
-                  background: "var(--bg3)", padding: "12px 14px",
-                  borderRadius: 10, border: "1px solid var(--border)",
-                }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 5 }}>
+            <div className="product-meta-grid" style={{ marginBottom:24 }}>
+              {[["category","Category",product.category],["event_note","Listed",product.created_at],["visibility","Views",product.views.toLocaleString()]].map(([icon,k,v]) => (
+                <div key={k} style={{ background:"var(--bg3)", padding:"12px 14px", borderRadius:10, border:"1px solid var(--border)" }}>
+                  <div style={{ display:"flex", alignItems:"center", gap:5, marginBottom:5 }}>
                     <Icon name={icon} size={13} color="var(--text3)" />
-                    <span style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text3)", textTransform: "uppercase", letterSpacing: "0.1em" }}>{k}</span>
+                    <span style={{ fontSize:"0.68rem", fontWeight:700, color:"var(--text3)", textTransform:"uppercase", letterSpacing:"0.1em" }}>{k}</span>
                   </div>
-                  <div style={{ color: "var(--text)", fontWeight: 600, fontSize: "0.88rem", wordBreak: "break-word" }}>{v}</div>
+                  <div style={{ color:"var(--text)", fontWeight:600, fontSize:"0.88rem", wordBreak:"break-word" }}>{v}</div>
                 </div>
               ))}
             </div>
 
-            {/* CTA buttons — desktop only (mobile uses sticky bar) */}
-            <div className="product-cta-desktop" style={{ flexDirection: "column", gap: 10 }}>
+            <div className="product-cta-desktop" style={{ flexDirection:"column", gap:10 }}>
               {brand?.whatsapp && (
-                <a href={wa} target="_blank" rel="noopener noreferrer" style={{ display: "block" }}>
-                  <Btn variant="whatsapp" size="lg" full>
-                    <Icon name="chat" size={18} color="#fff" /> Chat on WhatsApp
-                  </Btn>
+                <a href={wa} target="_blank" rel="noopener noreferrer" style={{ display:"block" }}>
+                  <Btn variant="whatsapp" size="lg" full><Icon name="chat" size={18} color="#fff" /> Chat on WhatsApp</Btn>
                 </a>
               )}
               {brand?.website && (
-                <a href={brand.website} target="_blank" rel="noopener noreferrer" style={{ display: "block" }}>
-                  <Btn variant="secondary" size="lg" full>
-                    <Icon name="language" size={18} /> Visit Website
-                  </Btn>
+                <a href={brand.website} target="_blank" rel="noopener noreferrer" style={{ display:"block" }}>
+                  <Btn variant="secondary" size="lg" full><Icon name="language" size={18} /> Visit Website</Btn>
                 </a>
               )}
             </div>
+          </div>
+        </div>
 
-          </div>{/* /detail column */}
-        </div>{/* /product-layout */}
-
-        {/* ── Related products ───────────────────────────────────────────── */}
         {related.length > 0 && (
-          <section style={{ padding: "32px 16px", borderTop: "1px solid var(--border)" }}>
+          <section style={{ padding:"32px 16px", borderTop:"1px solid var(--border)" }}>
             <SectionHeader title="More in This Category" sub="" />
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 14 }}>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(160px, 1fr))", gap:14 }}>
               {related.map(p => <ProductCard key={p.id} product={p} />)}
             </div>
           </section>
         )}
 
-        {/* ── Spacer so content isn't hidden behind sticky bar on mobile ── */}
-        {hasCTA && <div className="product-cta-mobile" style={{ position: "static", visibility: "hidden", pointerEvents: "none", background: "none", border: "none" }} />}
-
+        {hasCTA && <div className="product-cta-mobile" style={{ position:"static", visibility:"hidden", pointerEvents:"none", background:"none", border:"none" }} />}
       </div>
 
-      {/* ── Sticky CTA bar — mobile only ────────────────────────────────── */}
       {hasCTA && (
         <div className="product-cta-mobile">
           {brand?.whatsapp && (
-            <a href={wa} target="_blank" rel="noopener noreferrer" style={{ flex: 1 }}>
-              <button style={{
-                width: "100%", padding: "15px 10px",
-                background: "#25D366", border: "none", borderRadius: 14,
-                color: "#fff", fontWeight: 700, fontSize: "1rem",
-                cursor: "pointer", display: "flex", alignItems: "center",
-                justifyContent: "center", gap: 8,
-                WebkitTapHighlightColor: "transparent",
-              }}>
-                <Icon name="chat" size={20} color="#fff" />
-                WhatsApp
+            <a href={wa} target="_blank" rel="noopener noreferrer" style={{ flex:1 }}>
+              <button style={{ width:"100%", padding:"15px 10px", background:"#25D366", border:"none", borderRadius:14, color:"#fff", fontWeight:700, fontSize:"1rem", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:8, WebkitTapHighlightColor:"transparent" }}>
+                <Icon name="chat" size={20} color="#fff" />WhatsApp
               </button>
             </a>
           )}
           {brand?.website && (
             <a href={brand.website} target="_blank" rel="noopener noreferrer" style={{ flex: brand?.whatsapp ? "0 0 auto" : 1 }}>
-              <button style={{
-                width: "100%", padding: "15px 16px",
-                background: "var(--bg3)", border: "1px solid var(--border2)",
-                borderRadius: 14, color: "var(--text)",
-                fontWeight: 700, fontSize: "1rem", cursor: "pointer",
-                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                whiteSpace: "nowrap", WebkitTapHighlightColor: "transparent",
-              }}>
-                <Icon name="language" size={20} />
-                Website
+              <button style={{ width:"100%", padding:"15px 16px", background:"var(--bg3)", border:"1px solid var(--border2)", borderRadius:14, color:"var(--text)", fontWeight:700, fontSize:"1rem", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:8, whiteSpace:"nowrap", WebkitTapHighlightColor:"transparent" }}>
+                <Icon name="language" size={20} />Website
               </button>
             </a>
           )}
@@ -1204,7 +893,7 @@ const ProductPage = () => {
   );
 };
 
-// BRAND PAGE
+// ─── BRAND PAGE (FIXED FOR MOBILE) ───────────────────────────────────────────
 const BrandPage = () => {
   const { pageParams, brands, products, navigate } = useApp();
   const brand = brands.find(b => b.id === pageParams.id);
@@ -1224,63 +913,94 @@ const BrandPage = () => {
 
   return (
     <div className="fade-in">
-      {/* Banner */}
-      <div style={{ position:"relative", height:200, overflow:"hidden" }}>
+      {/* ── Banner — taller on mobile so the overlap doesn't eat the header ── */}
+      <div style={{ position:"relative", height:160, overflow:"hidden" }}>
         <img src={brand.banner} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} />
-        <div style={{ position:"absolute", inset:0, background:"linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.8))" }} />
+        <div style={{ position:"absolute", inset:0, background:"linear-gradient(to bottom, transparent 20%, rgba(0,0,0,0.75))" }} />
       </div>
 
       <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 16px" }}>
-        {/* Brand header */}
-        <div style={{ display:"flex", alignItems:"flex-end", gap:16, marginTop:-40, marginBottom:24, flexWrap:"wrap" }}>
-          <img src={brand.logo} alt={brand.name} style={{ width:80, height:80, borderRadius:16, border:"3px solid var(--card)", flexShrink:0, background:"var(--bg2)" }} />
-          <div style={{ flex:1, paddingBottom:4 }}>
-            <div style={{ display:"flex", alignItems:"center", gap:10, flexWrap:"wrap", marginBottom:4 }}>
-              <h1 style={{ fontSize:"2rem", color:"var(--text)" }}>{brand.name}</h1>
+
+        {/* ── Brand identity block ─────────────────────────────────────────── */}
+        {/* Logo pulled up by 28px — much gentler than the original −40px */}
+        <div style={{ display:"flex", alignItems:"flex-start", gap:14, marginTop:-28, marginBottom:16 }}>
+          <img
+            src={brand.logo} alt={brand.name}
+            style={{ width:72, height:72, borderRadius:16, border:"3px solid var(--card)", flexShrink:0, background:"var(--bg2)" }}
+          />
+          {/* Name + badge + category stacked — never truncates on narrow screens */}
+          <div style={{ paddingTop:32, minWidth:0 }}>
+            <div style={{ display:"flex", alignItems:"center", gap:8, flexWrap:"wrap" }}>
+              <h1 style={{ fontSize:"clamp(1.5rem, 6vw, 2.2rem)", color:"var(--text)", lineHeight:1.1, wordBreak:"break-word" }}>
+                {brand.name}
+              </h1>
               <Badge status={brand.status} />
             </div>
-            <p style={{ color:"var(--text2)", fontSize:"0.9rem" }}>{brand.category}</p>
-          </div>
-          <div style={{ display:"flex", gap:10, flexWrap:"wrap", paddingBottom:4 }}>
-            {brand.whatsapp && (
-              <a href={wa} target="_blank" rel="noopener noreferrer">
-                <Btn variant="whatsapp"><Icon name="chat" size={16} color="#fff" /> WhatsApp</Btn>
-              </a>
-            )}
-            {brand.website && (
-              <a href={brand.website} target="_blank" rel="noopener noreferrer">
-                <Btn variant="secondary"><Icon name="language" size={16} /> Website</Btn>
-              </a>
-            )}
+            <p style={{ color:"var(--text2)", fontSize:"0.85rem", marginTop:3 }}>{brand.category}</p>
           </div>
         </div>
 
-        {/* Bio */}
-        <div style={{ background:"var(--bg2)", borderRadius:"var(--radius)", padding:20, marginBottom:32, display:"flex", gap:24, flexWrap:"wrap" }}>
-          <p style={{ flex:"1 1 300px", color:"var(--text2)", lineHeight:1.7 }}>{brand.description}</p>
-          <div style={{ display:"flex", gap:16, alignItems:"flex-start", flexShrink:0 }}>
-            {brand.instagram && (
-              <a href={`https://instagram.com/${brand.instagram}`} target="_blank" rel="noopener noreferrer" style={{ color:"var(--text2)", fontSize:"0.85rem", display:"flex", alignItems:"center", gap:5 }}>
-                <Icon name="photo_camera" size={15} /> @{brand.instagram}
-              </a>
-            )}
-            {brand.twitter && (
-              <a href={`https://twitter.com/${brand.twitter}`} target="_blank" rel="noopener noreferrer" style={{ color:"var(--text2)", fontSize:"0.85rem", display:"flex", alignItems:"center", gap:5 }}>
-                <Icon name="alternate_email" size={15} /> @{brand.twitter}
-              </a>
-            )}
-          </div>
+        {/* ── CTA buttons — full-width on mobile, auto on desktop ─────────── */}
+        <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:20 }}>
+          {brand.whatsapp && (
+            <a href={wa} target="_blank" rel="noopener noreferrer" style={{ flex:"1 1 140px" }}>
+              <Btn variant="whatsapp" full><Icon name="chat" size={16} color="#fff" /> WhatsApp</Btn>
+            </a>
+          )}
+          {brand.website && (
+            <a href={brand.website} target="_blank" rel="noopener noreferrer" style={{ flex:"1 1 140px" }}>
+              <Btn variant="secondary" full><Icon name="language" size={16} /> Website</Btn>
+            </a>
+          )}
         </div>
 
-        {/* Products */}
-        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20, flexWrap:"wrap", gap:12 }}>
-          <h2 style={{ fontSize:"1.6rem" }}>Products ({brandProducts.length})</h2>
-          <Select value={sort} onChange={setSort} options={[{value:"newest",label:"Newest"},{value:"popular",label:"Most Popular"},{value:"price_asc",label:"Price: Low → High"}]} />
+        {/* ── Bio card ─────────────────────────────────────────────────────── */}
+        <div style={{ background:"var(--bg2)", borderRadius:"var(--radius)", padding:"16px", marginBottom:28, border:"1px solid var(--border)" }}>
+          <p style={{ color:"var(--text2)", lineHeight:1.7, fontSize:"0.9rem", marginBottom: (brand.instagram || brand.twitter) ? 12 : 0 }}>
+            {brand.description}
+          </p>
+          {(brand.instagram || brand.twitter) && (
+            <div style={{ display:"flex", gap:16, flexWrap:"wrap", borderTop:"1px solid var(--border)", paddingTop:12, marginTop:4 }}>
+              {brand.instagram && (
+                <a href={`https://instagram.com/${brand.instagram}`} target="_blank" rel="noopener noreferrer"
+                  style={{ color:"var(--text2)", fontSize:"0.85rem", display:"flex", alignItems:"center", gap:5 }}>
+                  <Icon name="photo_camera" size={15} /> @{brand.instagram}
+                </a>
+              )}
+              {brand.twitter && (
+                <a href={`https://twitter.com/${brand.twitter}`} target="_blank" rel="noopener noreferrer"
+                  style={{ color:"var(--text2)", fontSize:"0.85rem", display:"flex", alignItems:"center", gap:5 }}>
+                  <Icon name="alternate_email" size={15} /> @{brand.twitter}
+                </a>
+              )}
+            </div>
+          )}
         </div>
+
+        {/* ── Products header — stacks on very small screens ───────────────── */}
+        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:16, gap:12, flexWrap:"wrap" }}>
+          <h2 style={{ fontSize:"clamp(1.4rem, 5vw, 1.8rem)" }}>Products ({brandProducts.length})</h2>
+          {/* Compact inline sort — no extra label, just the select */}
+          <select
+            value={sort} onChange={e => setSort(e.target.value)}
+            style={{
+              background:"var(--bg3)", border:"1px solid var(--border2)", borderRadius:10,
+              padding:"9px 12px", color:"var(--text)", fontSize:"0.85rem",
+              outline:"none", cursor:"pointer",
+              // auto width — won't stretch to full row width
+              width:"auto", maxWidth:180,
+            }}
+          >
+            <option value="newest">Newest</option>
+            <option value="popular">Most Popular</option>
+            <option value="price_asc">Price: Low → High</option>
+          </select>
+        </div>
+
         {brandProducts.length === 0 ? (
           <EmptyState icon="inventory_2" title="No products yet" sub="This brand hasn't listed any products" />
         ) : (
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(200px, 1fr))", gap:16, marginBottom:48 }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(160px, 1fr))", gap:14, marginBottom:48 }}>
             {brandProducts.map(p => <ProductCard key={p.id} product={p} />)}
           </div>
         )}
@@ -1289,7 +1009,6 @@ const BrandPage = () => {
   );
 };
 
-// BRANDS PAGE
 const BrandsPage = () => {
   const { brands } = useApp();
   const [filter, setFilter] = useState("all");
@@ -1328,34 +1047,11 @@ const BrandsPage = () => {
   );
 };
 
-// CATEGORIES PAGE
 const CategoriesPage = () => {
   const { products, navigate } = useApp();
   const cats = CATEGORIES.map(c => ({ name:c, count: products.filter(p => p.category === c).length }));
-  const catIcons = {
-    Fashion: "checkroom",
-    Sneakers: "directions_walk",
-    Streetwear: "style",
-    Accessories: "watch",
-    Beauty: "face_retouching_natural",
-    "Food & Drink": "restaurant",
-    Tech: "devices",
-    "Home Decor": "chair",
-    Art: "palette",
-    Music: "library_music",
-  };
-  const catColors = {
-    Fashion: "#f43f5e",
-    Sneakers: "#f97316",
-    Streetwear: "#8b5cf6",
-    Accessories: "#f5b800",
-    Beauty: "#ec4899",
-    "Food & Drink": "#22c55e",
-    Tech: "#3b82f6",
-    "Home Decor": "#14b8a6",
-    Art: "#a855f7",
-    Music: "#06b6d4",
-  };
+  const catIcons = { Fashion:"checkroom", Sneakers:"directions_walk", Streetwear:"style", Accessories:"watch", Beauty:"face_retouching_natural", "Food & Drink":"restaurant", Tech:"devices", "Home Decor":"chair", Art:"palette", Music:"library_music" };
+  const catColors = { Fashion:"#f43f5e", Sneakers:"#f97316", Streetwear:"#8b5cf6", Accessories:"#f5b800", Beauty:"#ec4899", "Food & Drink":"#22c55e", Tech:"#3b82f6", "Home Decor":"#14b8a6", Art:"#a855f7", Music:"#06b6d4" };
 
   return (
     <div className="fade-in" style={{ maxWidth:1200, margin:"0 auto", padding:"32px 16px" }}>
@@ -1379,7 +1075,6 @@ const CategoriesPage = () => {
   );
 };
 
-// LOGIN PAGE
 const LoginPage = () => {
   const { login, navigate, showToast } = useApp();
   const [email, setEmail] = useState("");
@@ -1418,13 +1113,11 @@ const LoginPage = () => {
   );
 };
 
-// SELLER DASHBOARD
 const DashboardPage = () => {
   const { user, products, brands, addProduct, updateProduct, deleteProduct, updateBrand, navigate, showToast } = useApp();
   const [tab, setTab] = useState("products");
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
-  const [editingBrand, setEditingBrand] = useState(false);
 
   if (!user || user.role !== "seller") return <EmptyState icon="lock" title="Access denied" sub="Please log in as a seller" action={<Btn onClick={() => navigate("login")}>Log In</Btn>} />;
 
@@ -1441,7 +1134,6 @@ const DashboardPage = () => {
         <Btn onClick={() => { setEditProduct(null); setShowAddProduct(true); }}><Icon name="add" size={18} color="#fff" />Add Product</Btn>
       </div>
 
-      {/* Stats */}
       <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(160px, 1fr))", gap:16, marginBottom:32 }}>
         {[
           ["Total Products", myProducts.length, "inventory_2"],
@@ -1457,7 +1149,6 @@ const DashboardPage = () => {
         ))}
       </div>
 
-      {/* Tabs */}
       <div style={{ display:"flex", borderBottom:"1px solid var(--border)", marginBottom:24 }}>
         {[["products","My Products"],["brand","Brand Profile"]].map(([t,l]) => (
           <button key={t} onClick={() => setTab(t)} style={{ padding:"10px 20px", background:"none", border:"none", borderBottom:`2px solid ${tab===t?"var(--accent)":"transparent"}`, color: tab===t?"var(--accent)":"var(--text2)", fontWeight:600, cursor:"pointer" }}>{l}</button>
@@ -1465,37 +1156,35 @@ const DashboardPage = () => {
       </div>
 
       {tab === "products" && (
-        <>
-          {myProducts.length === 0 ? (
-            <EmptyState icon="inventory_2" title="No products yet" sub="Add your first product listing" action={<Btn onClick={() => setShowAddProduct(true)}><Icon name="add" size={16} color="#fff"/>Add Product</Btn>} />
-          ) : (
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(260px, 1fr))", gap:16 }}>
-              {myProducts.map(p => (
-                <Card key={p.id} style={{ display:"flex", flexDirection:"column" }}>
-                  <div style={{ aspectRatio:"16/9", overflow:"hidden", background:"var(--bg2)" }}>
-                    <img src={p.images[0]} alt={p.name} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
+        myProducts.length === 0 ? (
+          <EmptyState icon="inventory_2" title="No products yet" sub="Add your first product listing" action={<Btn onClick={() => setShowAddProduct(true)}><Icon name="add" size={16} color="#fff"/>Add Product</Btn>} />
+        ) : (
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(260px, 1fr))", gap:16 }}>
+            {myProducts.map(p => (
+              <Card key={p.id} style={{ display:"flex", flexDirection:"column" }}>
+                <div style={{ aspectRatio:"16/9", overflow:"hidden", background:"var(--bg2)" }}>
+                  <img src={p.images[0]} alt={p.name} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
+                </div>
+                <div style={{ padding:14, flex:1, display:"flex", flexDirection:"column", gap:8 }}>
+                  <div style={{ fontWeight:600 }}>{p.name}</div>
+                  <div style={{ display:"flex", gap:8, alignItems:"center" }}>
+                    <span style={{ fontFamily:"'Bebas Neue'", color:"var(--accent)", fontSize:"1.2rem" }}>R{p.price.toLocaleString()}</span>
+                    <Badge status={p.stock} />
                   </div>
-                  <div style={{ padding:14, flex:1, display:"flex", flexDirection:"column", gap:8 }}>
-                    <div style={{ fontWeight:600 }}>{p.name}</div>
-                    <div style={{ display:"flex", gap:8, alignItems:"center" }}>
-                      <span style={{ fontFamily:"'Bebas Neue'", color:"var(--accent)", fontSize:"1.2rem" }}>R{p.price.toLocaleString()}</span>
-                      <Badge status={p.stock} />
-                    </div>
-                    <div style={{ fontSize:"0.8rem", color:"var(--text2)", display:"flex", alignItems:"center", gap:4 }}><Icon name="visibility" size={14} color="var(--text3)" />{p.views} views</div>
-                    <div style={{ display:"flex", gap:8, marginTop:"auto", paddingTop:8 }}>
-                      <Btn size="sm" variant="secondary" full onClick={() => { setEditProduct(p); setShowAddProduct(true); }}><Icon name="edit" size={14}/>Edit</Btn>
-                      <Btn size="sm" variant="danger" onClick={() => { if(confirm("Delete this product?")) { deleteProduct(p.id); showToast("Product deleted"); } }}><Icon name="delete" size={14} color="#ff3366"/></Btn>
-                    </div>
+                  <div style={{ fontSize:"0.8rem", color:"var(--text2)", display:"flex", alignItems:"center", gap:4 }}><Icon name="visibility" size={14} color="var(--text3)" />{p.views} views</div>
+                  <div style={{ display:"flex", gap:8, marginTop:"auto", paddingTop:8 }}>
+                    <Btn size="sm" variant="secondary" full onClick={() => { setEditProduct(p); setShowAddProduct(true); }}><Icon name="edit" size={14}/>Edit</Btn>
+                    <Btn size="sm" variant="danger" onClick={() => { if(confirm("Delete this product?")) { deleteProduct(p.id); showToast("Product deleted"); } }}><Icon name="delete" size={14} color="#ff3366"/></Btn>
                   </div>
-                </Card>
-              ))}
-            </div>
-          )}
-        </>
+                </div>
+              </Card>
+            ))}
+          </div>
+        )
       )}
 
       {tab === "brand" && brand && (
-        <BrandEditForm brand={brand} onSave={data => { updateBrand(brand.id, data); showToast("Brand updated!"); setEditingBrand(false); }} />
+        <BrandEditForm brand={brand} onSave={data => { updateBrand(brand.id, data); showToast("Brand updated!"); }} />
       )}
 
       {showAddProduct && (
@@ -1517,11 +1206,10 @@ const DashboardPage = () => {
 const BrandEditForm = ({ brand, onSave }) => {
   const [form, setForm] = useState({ name: brand.name, description: brand.description, whatsapp: brand.whatsapp, website: brand.website, instagram: brand.instagram, twitter: brand.twitter });
   const set = (k) => (v) => setForm(f => ({ ...f, [k]: v }));
-
   return (
     <Card style={{ padding:24 }}>
       <h3 style={{ fontSize:"1.4rem", marginBottom:20 }}>Edit Brand Profile</h3>
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16, marginBottom:16 }}>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(220px, 1fr))", gap:16, marginBottom:16 }}>
         <Input label="Brand Name" value={form.name} onChange={set("name")} required />
         <Input label="WhatsApp Number" value={form.whatsapp} onChange={set("whatsapp")} placeholder="27821234567" />
         <Input label="Website URL" value={form.website} onChange={set("website")} placeholder="https://..." />
@@ -1538,11 +1226,8 @@ const BrandEditForm = ({ brand, onSave }) => {
 
 const ProductModal = ({ product, onClose, onSave }) => {
   const [form, setForm] = useState({
-    name: product?.name || "",
-    price: product?.price || "",
-    description: product?.description || "",
-    category: product?.category || CATEGORIES[0],
-    stock: product?.stock || "in_stock",
+    name: product?.name || "", price: product?.price || "", description: product?.description || "",
+    category: product?.category || CATEGORIES[0], stock: product?.stock || "in_stock",
     images: product?.images || ["https://picsum.photos/seed/new/400/400"],
   });
   const set = (k) => (v) => setForm(f => ({ ...f, [k]: v }));
@@ -1566,16 +1251,13 @@ const ProductModal = ({ product, onClose, onSave }) => {
         </div>
         <div style={{ display:"flex", gap:12, marginTop:24, justifyContent:"flex-end" }}>
           <Btn variant="secondary" onClick={onClose}>Cancel</Btn>
-          <Btn onClick={() => onSave({ ...form, price: Number(form.price) })}>
-            {product ? "Save Changes" : "Add Product"}
-          </Btn>
+          <Btn onClick={() => onSave({ ...form, price: Number(form.price) })}>{product ? "Save Changes" : "Add Product"}</Btn>
         </div>
       </div>
     </div>
   );
 };
 
-// ADMIN PANEL
 const AdminPage = () => {
   const { user, brands, products, updateBrand, deleteProduct, navigate, showToast } = useApp();
   const [tab, setTab] = useState("brands");
@@ -1588,12 +1270,7 @@ const AdminPage = () => {
       <p style={{ color:"var(--text2)", marginBottom:28 }}>Manage the MzansiStreet marketplace</p>
 
       <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(160px, 1fr))", gap:16, marginBottom:32 }}>
-        {[
-          ["Brands", brands.length, "storefront"],
-          ["Products", products.length, "inventory_2"],
-          ["Featured", brands.filter(b=>b.status==="featured").length, "star"],
-          ["Verified", brands.filter(b=>b.status==="verified").length, "verified"],
-        ].map(([label,val,icon]) => (
+        {[["Brands",brands.length,"storefront"],["Products",products.length,"inventory_2"],["Featured",brands.filter(b=>b.status==="featured").length,"star"],["Verified",brands.filter(b=>b.status==="verified").length,"verified"]].map(([label,val,icon]) => (
           <Card key={label} style={{ padding:20, textAlign:"center" }}>
             <div style={{ display:"flex", justifyContent:"center", marginBottom:8 }}><Icon name={icon} size={28} color="var(--accent)" /></div>
             <div style={{ fontFamily:"'Bebas Neue'", fontSize:"2rem", color:"var(--accent)" }}>{val}</div>
@@ -1666,8 +1343,7 @@ const Footer = () => {
             {[["Home","home"],["Brands","brands"],["Categories","categories"],["Search","search"]].map(([l,p]) => (
               <div key={p} onClick={() => navigate(p)} style={{ cursor:"pointer", color:"var(--text2)", fontSize:"0.85rem", marginBottom:8 }}
                 onMouseEnter={e => e.target.style.color="var(--accent)"}
-                onMouseLeave={e => e.target.style.color="var(--text2)"}
-              >{l}</div>
+                onMouseLeave={e => e.target.style.color="var(--text2)"}>{l}</div>
             ))}
           </div>
           <div>
@@ -1675,14 +1351,13 @@ const Footer = () => {
             {[["Seller Login","login"],["Dashboard","dashboard"]].map(([l,p]) => (
               <div key={p} onClick={() => navigate(p)} style={{ cursor:"pointer", color:"var(--text2)", fontSize:"0.85rem", marginBottom:8 }}
                 onMouseEnter={e => e.target.style.color="var(--accent)"}
-                onMouseLeave={e => e.target.style.color="var(--text2)"}
-              >{l}</div>
+                onMouseLeave={e => e.target.style.color="var(--text2)"}>{l}</div>
             ))}
           </div>
         </div>
         <div style={{ borderTop:"1px solid var(--border)", paddingTop:20, display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap", gap:12 }}>
           <span style={{ color:"var(--text3)", fontSize:"0.8rem", display:"flex", alignItems:"center", gap:6 }}>© 2025 MzansiStreet.mobi • Built with <Icon name="favorite" size={14} color="#ff3366" /> for South Africa</span>
-          <span style={{ color:"var(--text3)", fontSize:"0.75rem", fontFamily:"'JetBrains Mono'" }}>v1.0.0</span>
+          <span style={{ color:"var(--text3)", fontSize:"0.75rem", fontFamily:"'JetBrains Mono'" }}>v1.0.1</span>
         </div>
       </div>
     </footer>
@@ -1697,7 +1372,6 @@ const Router = () => {
   return <Page />;
 };
 
-// ─── ROOT APP ─────────────────────────────────────────────────────────────────
 export default function App() {
   return (
     <AppProvider>
@@ -1721,4 +1395,4 @@ function InnerApp() {
       </div>
     </>
   );
-    }
+   }
