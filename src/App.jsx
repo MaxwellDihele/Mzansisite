@@ -152,6 +152,125 @@ const GlobalStyles = ({ theme }) => {
         h1 { font-size: 2.4rem; }
         h2 { font-size: 1.8rem; }
       }
+      .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  background: rgba(10, 10, 10, 0.95);
+}
+
+.navbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.logo-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.nav-links {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  font-weight: 600;
+  color: var(--text2);
+}
+
+.nav-link.active {
+  color: var(--accent);
+}
+
+.search-wrapper {
+  flex: 1;
+  max-width: 320px;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 40px 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border2);
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.search-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.right-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-menu {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px;
+  min-width: 160px;
+}
+
+.dropdown-item {
+  width: 100%;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: var(--bg3);
+}
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 6px 0;
+}
     `}</style>
   );
 };
@@ -333,6 +452,7 @@ const BrandCard = ({ brand }) => {
   );
 };
 
+
 // ─── NAVBAR ───────────────────────────────────────────────────────────────────
 const Navbar = () => {
   const { navigate, page, user, logout, theme, setTheme } = useApp();
@@ -411,6 +531,15 @@ const Navbar = () => {
     </nav>
   );
 };
+
+const MenuItem = ({ label, icon, onClick }) => (
+  <button onClick={onClick} style={{ display:"flex", alignItems:"center", gap:8, width:"100%", padding:"8px 12px", borderRadius:8, background:"none", border:"none", color:"var(--text)", fontSize:"0.85rem", fontWeight:500, cursor:"pointer", textAlign:"left" }}
+    onMouseEnter={e => e.currentTarget.style.background="var(--bg3)"}
+    onMouseLeave={e => e.currentTarget.style.background="none"}
+  >
+    {icon} {label}
+  </button>
+);
 
 const MenuItem = ({ label, icon, onClick }) => (
   <button onClick={onClick} style={{ display:"flex", alignItems:"center", gap:8, width:"100%", padding:"8px 12px", borderRadius:8, background:"none", border:"none", color:"var(--text)", fontSize:"0.85rem", fontWeight:500, cursor:"pointer", textAlign:"left" }}
