@@ -120,14 +120,8 @@ export default function MzansiConnect() {
   };
 
   const menuItems = [
-    { label: "🏠 Home", action: () => { setActiveTab("home"); setMenuOpen(false); } },
-    { label: "🔍 Browse Services", action: () => { setActiveTab("search"); setSearchResults(mockProfiles); setMenuOpen(false); } },
-    { label: "📋 Categories", action: () => { setActiveTab("categories"); setMenuOpen(false); } },
-    { label: "➕ Create Profile", action: () => { setShowSignupModal(true); setMenuOpen(false); } },
     { label: "✅ Get Verified", action: () => { setShowVerifyModal(true); setMenuOpen(false); } },
-    { label: "📞 Contact Us", action: () => { showToast("📧 hello@mzansiconnect.co.za"); setMenuOpen(false); } },
-    { label: "ℹ️ About", action: () => { showToast("Mzansi Connect v1.0 — Connecting South Africa"); setMenuOpen(false); } },
-  ];
+   ];
 
 
       {/* Browse Categories */}
