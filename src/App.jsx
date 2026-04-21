@@ -2,12 +2,12 @@ import { useState } from "react";
 
 /* ─────────────── DATA ─────────────── */
 const portfolio = [
-  { id: 1, src: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80", span: "large", label: "Portrait" },
-  { id: 2, src: "https://images.unsplash.com/photo-1596704017254-9b5e2a025acf?w=300&q=80", span: "small", label: "Beauty" },
-  { id: 3, src: "https://images.unsplash.com/photo-1529637977047-9c6f1d57e96f?w=300&q=80", span: "small", label: "Couples" },
-  { id: 4, src: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=300&q=80", span: "small", label: "Fashion" },
-  { id: 5, src: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=300&q=80", span: "small", label: "Nature" },
-  { id: 6, src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80", span: "wide", label: "Landscape" },
+  { id: 1, src: "https://picsum.photos/seed/portrait1/400/400", span: "large", label: "Portrait", likes: 2341 },
+  { id: 2, src: "https://picsum.photos/seed/beauty2/300/300", span: "small", label: "Beauty", likes: 876 },
+  { id: 3, src: "https://picsum.photos/seed/couple3/300/300", span: "small", label: "Couples", likes: 1204 },
+  { id: 4, src: "https://picsum.photos/seed/fashion4/300/300", span: "small", label: "Fashion", likes: 543 },
+  { id: 5, src: "https://picsum.photos/seed/nature5/300/300", span: "small", label: "Nature", likes: 389 },
+  { id: 6, src: "https://picsum.photos/seed/landscape6/600/200", span: "wide", label: "Landscape", likes: 3102 },
 ];
 
 const SOCIAL_LINKS = [
@@ -17,44 +17,43 @@ const SOCIAL_LINKS = [
 ];
 
 const PEOPLE = [
-  { id: 1, name: "Zinhle Dube", handle: "@zinhle_d", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80", role: "Model", location: "Cape Town, ZA", bio: "Fashion & commercial model. Lover of art, culture and the African sun. Available for bookings.", followers: 8400, following: 210, projects: 22, rating: 4.7, reviews: 41, verified: true, isFollowing: true,
-    portfolio: ["https://images.unsplash.com/photo-1509631179647-0177331693ae?w=300&q=80","https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=300&q=80","https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&q=80","https://images.unsplash.com/photo-1483985988355-763728e1935b?w=300&q=80"] },
-  { id: 2, name: "Kagiso Sithole", handle: "@kagiso_s", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80", role: "Fashion Designer", location: "Durban, ZA", bio: "Designing bold African fashion for the modern world. Streetwear meets heritage.", followers: 3200, following: 180, projects: 15, rating: 4.5, reviews: 28, verified: false, isFollowing: false,
-    portfolio: ["https://images.unsplash.com/photo-1558171813-f5a90fe22b8a?w=300&q=80","https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=300&q=80","https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=300&q=80","https://images.unsplash.com/photo-1550614000-4895a10e1bfd?w=300&q=80"] },
-  { id: 3, name: "Naledi Mokoena", handle: "@naledi.m", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80", role: "Makeup Artist", location: "Pretoria, ZA", bio: "Bridal, editorial & SFX makeup. Over 200 happy clients. Let me make you shine ✨", followers: 12100, following: 304, projects: 67, rating: 4.9, reviews: 93, verified: true, isFollowing: true,
-    portfolio: ["https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=300&q=80","https://images.unsplash.com/photo-1596704017254-9b5e2a025acf?w=300&q=80","https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=300&q=80","https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=300&q=80"] },
-  { id: 4, name: "Bongani Khumalo", handle: "@bongani_k", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80", role: "Videographer", location: "Johannesburg, ZA", bio: "Cinematic storytelling for brands, events & music videos. Sony FX6 operator.", followers: 5700, following: 260, projects: 34, rating: 4.6, reviews: 52, verified: false, isFollowing: false,
-    portfolio: ["https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=300&q=80","https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=300&q=80","https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=300&q=80","https://images.unsplash.com/photo-1587145820098-5e8b5e59e2c3?w=300&q=80"] },
-  { id: 5, name: "Lerato Ntuli", handle: "@lerato.ntuli", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&q=80", role: "Stylist", location: "Sandton, ZA", bio: "Celebrity stylist. Fashion week veteran. Making people look and feel extraordinary.", followers: 9300, following: 190, projects: 44, rating: 4.8, reviews: 76, verified: true, isFollowing: true,
-    portfolio: ["https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=300&q=80","https://images.unsplash.com/photo-1483985988355-763728e1935b?w=300&q=80","https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=300&q=80","https://images.unsplash.com/photo-1558171813-f5a90fe22b8a?w=300&q=80"] },
-  { id: 6, name: "Sipho Nkosi", handle: "@sipho_n", avatar: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&q=80", role: "Art Director", location: "Cape Town, ZA", bio: "Creative direction for lifestyle brands. Turning ideas into iconic visuals.", followers: 4100, following: 142, projects: 19, rating: 4.4, reviews: 33, verified: false, isFollowing: false,
-    portfolio: ["https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&q=80","https://images.unsplash.com/photo-1557804506-669a67965ba0?w=300&q=80","https://images.unsplash.com/photo-1547153760-18fc86324498?w=300&q=80","https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=300&q=80"] },
-  { id: 7, name: "Ayanda Mthembu", handle: "@ayanda.m", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80", role: "Content Creator", location: "Durban, ZA", bio: "Travel & lifestyle content creator. Exploring Africa one post at a time 🌍", followers: 31000, following: 520, projects: 88, rating: 4.7, reviews: 110, verified: true, isFollowing: false,
-    portfolio: ["https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=300&q=80","https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=300&q=80","https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=300&q=80","https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&q=80"] },
-  { id: 8, name: "Thabo Dlamini", handle: "@thabo_d", avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&q=80", role: "Photographer", location: "Pretoria, ZA", bio: "Documentary & street photographer. Telling South Africa's untold stories.", followers: 7200, following: 388, projects: 29, rating: 4.8, reviews: 64, verified: false, isFollowing: true,
-    portfolio: ["https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=300&q=80","https://images.unsplash.com/photo-1529637977047-9c6f1d57e96f?w=300&q=80","https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80","https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&q=80"] },
-  // following list people
-  { id: 9, name: "Minnie Dlamini", handle: "@minniedlamini", avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&q=80", role: "TV Presenter", location: "Johannesburg, ZA", bio: "TV presenter, actress & entrepreneur. Living my best life. ✨", followers: 2100000, following: 890, projects: 120, rating: 4.9, reviews: 202, verified: true, isFollowing: true,
-    portfolio: ["https://images.unsplash.com/photo-1509631179647-0177331693ae?w=300&q=80","https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&q=80","https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=300&q=80","https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=300&q=80"] },
-  { id: 10, name: "Trevor Noah", handle: "@trevornoah", avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80", role: "Comedian", location: "New York / SA", bio: "Comedian, author, former host of The Daily Show. Proudly South African 🇿🇦", followers: 8900000, following: 420, projects: 55, rating: 4.9, reviews: 312, verified: true, isFollowing: true,
-    portfolio: ["https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80","https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=80","https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&q=80","https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&q=80"] },
-  { id: 11, name: "Nomzamo Mbatha", handle: "@nomzamo_m", avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&q=80", role: "Actress", location: "Los Angeles / SA", bio: "Actress, humanitarian & UNHCR Goodwill Ambassador. South African heart. 🌍", followers: 3400000, following: 660, projects: 78, rating: 5.0, reviews: 188, verified: true, isFollowing: true,
-    portfolio: ["https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&q=80","https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&q=80","https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&q=80","https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&q=80"] },
-  { id: 12, name: "DJ Zinhle", handle: "@djzinhle", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80", role: "DJ & Entrepreneur", location: "Johannesburg, ZA", bio: "Award-winning DJ, entrepreneur & mother. Era by DJ Zinhle. 🎧", followers: 4200000, following: 730, projects: 96, rating: 4.8, reviews: 174, verified: true, isFollowing: true,
-    portfolio: ["https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&q=80","https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300&q=80","https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=300&q=80","https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300&q=80"] },
-  { id: 13, name: "Riky Rick Studio", handle: "@rikyrickworld", avatar: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&q=80", role: "Creative Studio", location: "Johannesburg, ZA", bio: "A creative collective honouring Riky Rick's legacy. Art, fashion & culture.", followers: 980000, following: 310, projects: 44, rating: 4.7, reviews: 89, verified: false, isFollowing: true,
-    portfolio: ["https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&q=80","https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300&q=80","https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=300&q=80","https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=300&q=80"] },
-  { id: 14, name: "Sho Madjozi", handle: "@shomadjozi", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&q=80", role: "Musician", location: "Johannesburg, ZA", bio: "BET Award winner. Tsonga girl changing the world through music and colour 🎶", followers: 1700000, following: 480, projects: 62, rating: 4.9, reviews: 143, verified: true, isFollowing: true,
-    portfolio: ["https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&q=80","https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300&q=80","https://images.unsplash.com/photo-1485579149621-3123dd979885?w=300&q=80","https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300&q=80"] },
+  { id: 1, name: "Zinhle Dube", handle: "@zinhle_d", avatar: "https://picsum.photos/seed/zinhle1/200/200", role: "Model", location: "Cape Town, ZA", bio: "Fashion & commercial model. Lover of art, culture and the African sun. Available for bookings.", followers: 8400, following: 210, projects: 22, rating: 4.7, reviews: 41, verified: true, isFollowing: true,
+    portfolio: ["https://picsum.photos/seed/z1a/300/300","https://picsum.photos/seed/z1b/300/300","https://picsum.photos/seed/z1c/300/300","https://picsum.photos/seed/z1d/300/300"] },
+  { id: 2, name: "Kagiso Sithole", handle: "@kagiso_s", avatar: "https://picsum.photos/seed/kagiso2/200/200", role: "Fashion Designer", location: "Durban, ZA", bio: "Designing bold African fashion for the modern world. Streetwear meets heritage.", followers: 3200, following: 180, projects: 15, rating: 4.5, reviews: 28, verified: false, isFollowing: false,
+    portfolio: ["https://picsum.photos/seed/k2a/300/300","https://picsum.photos/seed/k2b/300/300","https://picsum.photos/seed/k2c/300/300","https://picsum.photos/seed/k2d/300/300"] },
+  { id: 3, name: "Naledi Mokoena", handle: "@naledi.m", avatar: "https://picsum.photos/seed/naledi3/200/200", role: "Makeup Artist", location: "Pretoria, ZA", bio: "Bridal, editorial & SFX makeup. Over 200 happy clients. Let me make you shine ✨", followers: 12100, following: 304, projects: 67, rating: 4.9, reviews: 93, verified: true, isFollowing: true,
+    portfolio: ["https://picsum.photos/seed/n3a/300/300","https://picsum.photos/seed/n3b/300/300","https://picsum.photos/seed/n3c/300/300","https://picsum.photos/seed/n3d/300/300"] },
+  { id: 4, name: "Bongani Khumalo", handle: "@bongani_k", avatar: "https://picsum.photos/seed/bongani4/200/200", role: "Videographer", location: "Johannesburg, ZA", bio: "Cinematic storytelling for brands, events & music videos. Sony FX6 operator.", followers: 5700, following: 260, projects: 34, rating: 4.6, reviews: 52, verified: false, isFollowing: false,
+    portfolio: ["https://picsum.photos/seed/b4a/300/300","https://picsum.photos/seed/b4b/300/300","https://picsum.photos/seed/b4c/300/300","https://picsum.photos/seed/b4d/300/300"] },
+  { id: 5, name: "Lerato Ntuli", handle: "@lerato.ntuli", avatar: "https://picsum.photos/seed/lerato5/200/200", role: "Stylist", location: "Sandton, ZA", bio: "Celebrity stylist. Fashion week veteran. Making people look and feel extraordinary.", followers: 9300, following: 190, projects: 44, rating: 4.8, reviews: 76, verified: true, isFollowing: true,
+    portfolio: ["https://picsum.photos/seed/l5a/300/300","https://picsum.photos/seed/l5b/300/300","https://picsum.photos/seed/l5c/300/300","https://picsum.photos/seed/l5d/300/300"] },
+  { id: 6, name: "Sipho Nkosi", handle: "@sipho_n", avatar: "https://picsum.photos/seed/sipho6/200/200", role: "Art Director", location: "Cape Town, ZA", bio: "Creative direction for lifestyle brands. Turning ideas into iconic visuals.", followers: 4100, following: 142, projects: 19, rating: 4.4, reviews: 33, verified: false, isFollowing: false,
+    portfolio: ["https://picsum.photos/seed/s6a/300/300","https://picsum.photos/seed/s6b/300/300","https://picsum.photos/seed/s6c/300/300","https://picsum.photos/seed/s6d/300/300"] },
+  { id: 7, name: "Ayanda Mthembu", handle: "@ayanda.m", avatar: "https://picsum.photos/seed/ayanda7/200/200", role: "Content Creator", location: "Durban, ZA", bio: "Travel & lifestyle content creator. Exploring Africa one post at a time 🌍", followers: 31000, following: 520, projects: 88, rating: 4.7, reviews: 110, verified: true, isFollowing: false,
+    portfolio: ["https://picsum.photos/seed/a7a/300/300","https://picsum.photos/seed/a7b/300/300","https://picsum.photos/seed/a7c/300/300","https://picsum.photos/seed/a7d/300/300"] },
+  { id: 8, name: "Thabo Dlamini", handle: "@thabo_d", avatar: "https://picsum.photos/seed/thabo8/200/200", role: "Photographer", location: "Pretoria, ZA", bio: "Documentary & street photographer. Telling South Africa's untold stories.", followers: 7200, following: 388, projects: 29, rating: 4.8, reviews: 64, verified: false, isFollowing: true,
+    portfolio: ["https://picsum.photos/seed/t8a/300/300","https://picsum.photos/seed/t8b/300/300","https://picsum.photos/seed/t8c/300/300","https://picsum.photos/seed/t8d/300/300"] },
+  { id: 9, name: "Minnie Dlamini", handle: "@minniedlamini", avatar: "https://picsum.photos/seed/minnie9/200/200", role: "TV Presenter", location: "Johannesburg, ZA", bio: "TV presenter, actress & entrepreneur. Living my best life. ✨", followers: 2100000, following: 890, projects: 120, rating: 4.9, reviews: 202, verified: true, isFollowing: true,
+    portfolio: ["https://picsum.photos/seed/m9a/300/300","https://picsum.photos/seed/m9b/300/300","https://picsum.photos/seed/m9c/300/300","https://picsum.photos/seed/m9d/300/300"] },
+  { id: 10, name: "Trevor Noah", handle: "@trevornoah", avatar: "https://picsum.photos/seed/trevor10/200/200", role: "Comedian", location: "New York / SA", bio: "Comedian, author, former host of The Daily Show. Proudly South African 🇿🇦", followers: 8900000, following: 420, projects: 55, rating: 4.9, reviews: 312, verified: true, isFollowing: true,
+    portfolio: ["https://picsum.photos/seed/tr10a/300/300","https://picsum.photos/seed/tr10b/300/300","https://picsum.photos/seed/tr10c/300/300","https://picsum.photos/seed/tr10d/300/300"] },
+  { id: 11, name: "Nomzamo Mbatha", handle: "@nomzamo_m", avatar: "https://picsum.photos/seed/nomzamo11/200/200", role: "Actress", location: "Los Angeles / SA", bio: "Actress, humanitarian & UNHCR Goodwill Ambassador. South African heart. 🌍", followers: 3400000, following: 660, projects: 78, rating: 5.0, reviews: 188, verified: true, isFollowing: true,
+    portfolio: ["https://picsum.photos/seed/no11a/300/300","https://picsum.photos/seed/no11b/300/300","https://picsum.photos/seed/no11c/300/300","https://picsum.photos/seed/no11d/300/300"] },
+  { id: 12, name: "DJ Zinhle", handle: "@djzinhle", avatar: "https://picsum.photos/seed/djzinhle12/200/200", role: "DJ & Entrepreneur", location: "Johannesburg, ZA", bio: "Award-winning DJ, entrepreneur & mother. Era by DJ Zinhle. 🎧", followers: 4200000, following: 730, projects: 96, rating: 4.8, reviews: 174, verified: true, isFollowing: true,
+    portfolio: ["https://picsum.photos/seed/dj12a/300/300","https://picsum.photos/seed/dj12b/300/300","https://picsum.photos/seed/dj12c/300/300","https://picsum.photos/seed/dj12d/300/300"] },
+  { id: 13, name: "Riky Rick Studio", handle: "@rikyrickworld", avatar: "https://picsum.photos/seed/riky13/200/200", role: "Creative Studio", location: "Johannesburg, ZA", bio: "A creative collective honouring Riky Rick's legacy. Art, fashion & culture.", followers: 980000, following: 310, projects: 44, rating: 4.7, reviews: 89, verified: false, isFollowing: true,
+    portfolio: ["https://picsum.photos/seed/rk13a/300/300","https://picsum.photos/seed/rk13b/300/300","https://picsum.photos/seed/rk13c/300/300","https://picsum.photos/seed/rk13d/300/300"] },
+  { id: 14, name: "Sho Madjozi", handle: "@shomadjozi", avatar: "https://picsum.photos/seed/sho14/200/200", role: "Musician", location: "Johannesburg, ZA", bio: "BET Award winner. Tsonga girl changing the world through music and colour 🎶", followers: 1700000, following: 480, projects: 62, rating: 4.9, reviews: 143, verified: true, isFollowing: true,
+    portfolio: ["https://picsum.photos/seed/sh14a/300/300","https://picsum.photos/seed/sh14b/300/300","https://picsum.photos/seed/sh14c/300/300","https://picsum.photos/seed/sh14d/300/300"] },
 ];
 
 const FOLLOWERS_IDS = [1,2,3,4,5,6,7,8];
 const FOLLOWING_IDS = [9,10,11,12,13,14];
 
 const INITIAL_REVIEWS = [
-  { id: 1, name: "Jesse Ntuli", avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=80&q=80", rating: 4.9, text: "Great experience shooting with Thandi! She is super talented and made me feel incredibly comfortable.", date: "2 weeks ago", verified: true },
-  { id: 2, name: "Amara Dlamini", avatar: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=80&q=80", rating: 5.0, text: "Absolutely stunning work. Thandiwe has an eye for light and detail that is unmatched. Will definitely book again.", date: "1 month ago", verified: true },
-  { id: 3, name: "Sipho Mokoena", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80", rating: 4.7, text: "Professional, creative and punctual. Our brand shoot came out incredible. Highly recommend.", date: "2 months ago", verified: false },
+  { id: 1, name: "Jesse Ntuli", avatar: "https://picsum.photos/seed/jesse1/80/80", rating: 4.9, text: "Great experience shooting with Thandi! She is super talented and made me feel incredibly comfortable.", date: "2 weeks ago", verified: true },
+  { id: 2, name: "Amara Dlamini", avatar: "https://picsum.photos/seed/amara2/80/80", rating: 5.0, text: "Absolutely stunning work. Thandiwe has an eye for light and detail that is unmatched. Will definitely book again.", date: "1 month ago", verified: true },
+  { id: 3, name: "Sipho Mokoena", avatar: "https://picsum.photos/seed/sipho3/80/80", rating: 4.7, text: "Professional, creative and punctual. Our brand shoot came out incredible. Highly recommend.", date: "2 months ago", verified: false },
 ];
 
 /* ─────────────── HELPERS ─────────────── */
@@ -370,7 +369,7 @@ export default function ProfilePage() {
           <div style={{ background: "linear-gradient(145deg,#1c2130,#1a1f2e)", borderRadius: "24px", padding: "22px", marginBottom: "14px", border: "1px solid rgba(255,255,255,0.06)", boxShadow: "0 8px 40px rgba(0,0,0,0.4)" }}>
             <div style={{ display: "flex", alignItems: "flex-start", gap: "16px", marginBottom: "16px" }}>
               <div style={{ position: "relative", flexShrink: 0 }}>
-                <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&q=80" alt="Thandiwe" style={{ width: "76px", height: "76px", borderRadius: "50%", objectFit: "cover", border: "3px solid #2a8a5a" }} />
+                <img src="https://picsum.photos/seed/thandiwe/200/200" alt="Thandiwe" style={{ width: "76px", height: "76px", borderRadius: "50%", objectFit: "cover", border: "3px solid #2a8a5a" }} />
                 <div style={{ position: "absolute", bottom: 2, right: 2, background: "#2a8a5a", borderRadius: "50%", width: "20px", height: "20px", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #1a1f2e" }}>
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
                 </div>
@@ -450,17 +449,43 @@ export default function ProfilePage() {
                 <button onClick={() => showToast("Opening full portfolio…")} style={{ background: "none", border: "none", color: "#2a8a5a", fontSize: "13px", fontWeight: "600", cursor: "pointer" }}>See all →</button>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "7px" }}>
-                {portfolio.map(p => (
-                  <div key={p.id} onClick={() => setPhotoModal(p)} style={{ gridColumn: p.span === "large" ? "span 2" : p.span === "wide" ? "span 3" : "span 1", position: "relative", borderRadius: "12px", overflow: "hidden", aspectRatio: p.span === "wide" ? "3/1" : "1", cursor: "pointer" }}>
-                    <img src={p.src} alt={p.label} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top,rgba(0,0,0,0.5),transparent 50%)", display: "flex", alignItems: "flex-end", padding: "7px" }}>
-                      <span style={{ fontSize: "10px", color: "#fff", fontWeight: "600", background: "rgba(0,0,0,0.4)", padding: "2px 7px", borderRadius: "20px" }}>{p.label}</span>
+                {portfolio.map(p => {
+                  const liked = !!likedPhotos[p.id];
+                  const likeCount = p.likes + (liked ? 1 : 0);
+                  const fmtLikes = likeCount >= 1000 ? (likeCount/1000).toFixed(1)+"k" : likeCount;
+                  const colSpan = p.span === "large" ? "span 2" : p.span === "wide" ? "span 3" : "span 1";
+                  const cellHeight = p.span === "wide" ? "100px" : "120px";
+                  return (
+                    <div key={p.id} onClick={() => setPhotoModal(p)}
+                      style={{ gridColumn: colSpan, position: "relative", borderRadius: "12px", overflow: "hidden", height: cellHeight, cursor: "pointer" }}>
+                      <img src={p.src} alt={p.label}
+                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                        onError={e => { e.target.src = `https://picsum.photos/seed/${p.id}x/300/300`; }}
+                      />
+
+                      {/* Gradient overlay bottom — label + like count */}
+                      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top,rgba(0,0,0,0.7) 0%,transparent 55%)", display: "flex", alignItems: "flex-end", justifyContent: "space-between", padding: "6px 7px" }}>
+                        <span style={{ fontSize: "9px", color: "#fff", fontWeight: "700", background: "rgba(0,0,0,0.4)", padding: "2px 6px", borderRadius: "20px", backdropFilter: "blur(4px)", whiteSpace: "nowrap" }}>{p.label}</span>
+                        <div style={{ display: "flex", alignItems: "center", gap: "2px", background: "rgba(0,0,0,0.45)", borderRadius: "20px", padding: "2px 6px", backdropFilter: "blur(4px)" }}>
+                          <svg width="9" height="9" viewBox="0 0 24 24" fill={liked ? "#ff5a7e" : "rgba(255,255,255,0.9)"} strokeWidth="0">
+                            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                          </svg>
+                          <span style={{ fontSize: "9px", color: "#fff", fontWeight: "700" }}>{fmtLikes}</span>
+                        </div>
+                      </div>
+
+                      {/* Like button top-right */}
+                      <button
+                        onClick={e => { e.stopPropagation(); handleLike(p.id); }}
+                        style={{ position: "absolute", top: "6px", right: "6px", background: liked ? "rgba(225,50,70,0.88)" : "rgba(0,0,0,0.45)", border: "none", borderRadius: "50%", width: "26px", height: "26px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", backdropFilter: "blur(4px)", boxShadow: liked ? "0 2px 8px rgba(225,50,70,0.55)" : "none", transition: "all .15s" }}
+                      >
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill={liked ? "white" : "none"} stroke="white" strokeWidth="2.2">
+                          <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                        </svg>
+                      </button>
                     </div>
-                    <button onClick={e => { e.stopPropagation(); handleLike(p.id); }} style={{ position: "absolute", top: "7px", right: "7px", background: likedPhotos[p.id] ? "rgba(235,80,80,0.85)" : "rgba(0,0,0,0.45)", border: "none", borderRadius: "50%", width: "26px", height: "26px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill={likedPhotos[p.id] ? "white" : "none"} stroke="white" strokeWidth="2.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-                    </button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
               <div style={{ display: "flex", gap: "7px", marginTop: "12px", flexWrap: "wrap" }}>
                 {[["⭐",`${reviews.length} Reviews`,null],["🚩","Report",() => setModal("report")],["✅","ID Verified",null],["✅","Work Verified",null]].map(([ic, lb, fn]) => (
@@ -623,7 +648,7 @@ export default function ProfilePage() {
               <button onClick={() => setModal(null)} style={{ background: "rgba(255,255,255,0.07)", border: "none", borderRadius: "50%", width: "28px", height: "28px", cursor: "pointer", color: "#7a8299", fontSize: "15px", display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "11px", background: "rgba(255,255,255,0.04)", borderRadius: "13px", padding: "12px 14px", marginBottom: "18px", border: "1px solid rgba(255,255,255,0.07)" }}>
-              <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&q=80" alt="Thandiwe" style={{ width: "42px", height: "42px", borderRadius: "50%", objectFit: "cover", border: "2px solid #2a8a5a" }} />
+              <img src="https://picsum.photos/seed/thandiwe/200/200" alt="Thandiwe" style={{ width: "42px", height: "42px", borderRadius: "50%", objectFit: "cover", border: "2px solid #2a8a5a" }} />
               <div>
                 <div style={{ fontSize: "13px", fontWeight: "700", color: "#fff" }}>Thandiwe Nkosi</div>
                 <div style={{ fontSize: "11px", color: "#7a8299" }}>Freelance Photographer · 🇿🇦 Joburg</div>
@@ -649,21 +674,79 @@ export default function ProfilePage() {
       )}
 
       {/* ══════ PHOTO MODAL ══════ */}
-      {photoModal && (
-        <div style={ov} onClick={() => setPhotoModal(null)}>
-          <div style={{ ...mb, padding: 0, overflow: "hidden" }} onClick={e => e.stopPropagation()}>
-            <img src={photoModal.src} alt={photoModal.label} style={{ width: "100%", display: "block" }} />
-            <div style={{ padding: "14px 16px 16px" }}>
-              <div style={{ fontSize: "14px", fontWeight: "700", color: "#fff", marginBottom: "11px" }}>{photoModal.label}</div>
-              <div style={{ display: "flex", gap: "8px" }}>
-                {[["❤️", likedPhotos[photoModal.id] ? "Liked" : "Like", () => handleLike(photoModal.id)], ["🔖", savedPhotos[photoModal.id] ? "Saved" : "Save", () => handleSave(photoModal.id)], ["🔗","Share", () => { showToast("Link copied!"); setPhotoModal(null); }]].map(([ic, lb, fn]) => (
-                  <button key={lb} onClick={fn} style={{ flex: 1, padding: "9px 5px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "9px", color: "#e8eaf0", fontSize: "12px", fontWeight: "600", cursor: "pointer" }}>{ic} {lb}</button>
-                ))}
+      {photoModal && (() => {
+        const liked = !!likedPhotos[photoModal.id];
+        const saved = !!savedPhotos[photoModal.id];
+        const likeCount = photoModal.likes + (liked ? 1 : 0);
+        const fmtLikes = likeCount >= 1000 ? (likeCount/1000).toFixed(1)+"k" : likeCount;
+        return (
+          <div style={ov} onClick={() => setPhotoModal(null)}>
+            <div style={{ ...mb, padding: 0, overflow: "hidden" }} onClick={e => e.stopPropagation()}>
+              {/* Image */}
+              <div style={{ position: "relative" }}>
+                <img src={photoModal.src} alt={photoModal.label} style={{ width: "100%", display: "block", maxHeight: "340px", objectFit: "cover" }} />
+                {/* Label badge */}
+                <div style={{ position: "absolute", bottom: "10px", left: "12px", background: "rgba(0,0,0,0.5)", backdropFilter: "blur(6px)", borderRadius: "20px", padding: "3px 10px" }}>
+                  <span style={{ fontSize: "11px", color: "#fff", fontWeight: "600" }}>{photoModal.label}</span>
+                </div>
+              </div>
+
+              {/* Actions bar */}
+              <div style={{ padding: "14px 16px 18px" }}>
+                {/* Like count display */}
+                <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "14px" }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill={liked ? "#ff5a7e" : "none"} stroke={liked ? "#ff5a7e" : "#7a8299"} strokeWidth="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                  </svg>
+                  <span style={{ fontSize: "15px", fontWeight: "800", color: liked ? "#ff5a7e" : "#e8eaf0" }}>{fmtLikes}</span>
+                  <span style={{ fontSize: "12px", color: "#7a8299" }}>likes</span>
+                </div>
+
+                {/* 3 action buttons */}
+                <div style={{ display: "flex", gap: "8px" }}>
+                  {/* Like */}
+                  <button
+                    onClick={() => handleLike(photoModal.id)}
+                    style={{ flex: 1, padding: "11px 6px", background: liked ? "rgba(255,90,126,0.15)" : "rgba(255,255,255,0.06)", border: `1.5px solid ${liked ? "rgba(255,90,126,0.4)" : "rgba(255,255,255,0.1)"}`, borderRadius: "11px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", color: liked ? "#ff5a7e" : "#e8eaf0", fontSize: "13px", fontWeight: "700", transition: "all .2s" }}
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill={liked ? "#ff5a7e" : "none"} stroke={liked ? "#ff5a7e" : "currentColor"} strokeWidth="2.2">
+                      <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                    </svg>
+                    {liked ? "Liked" : "Like"}
+                  </button>
+
+                  {/* Save */}
+                  <button
+                    onClick={() => handleSave(photoModal.id)}
+                    style={{ flex: 1, padding: "11px 6px", background: saved ? "rgba(42,138,90,0.15)" : "rgba(255,255,255,0.06)", border: `1.5px solid ${saved ? "rgba(42,138,90,0.4)" : "rgba(255,255,255,0.1)"}`, borderRadius: "11px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", color: saved ? "#4ecb8a" : "#e8eaf0", fontSize: "13px", fontWeight: "700", transition: "all .2s" }}
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill={saved ? "#4ecb8a" : "none"} stroke={saved ? "#4ecb8a" : "currentColor"} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+                    </svg>
+                    {saved ? "Saved" : "Save"}
+                  </button>
+
+                  {/* Share — modern upload/arrow-up icon */}
+                  <button
+                    onClick={() => { showToast("Link copied! ✨"); setPhotoModal(null); }}
+                    style={{ flex: 1, padding: "11px 6px", background: "rgba(255,255,255,0.06)", border: "1.5px solid rgba(255,255,255,0.1)", borderRadius: "11px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", color: "#e8eaf0", fontSize: "13px", fontWeight: "700", transition: "all .2s" }}
+                    onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.1)"}
+                    onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.06)"}
+                  >
+                    {/* Modern "share" — upward arrow from a box */}
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
+                      <polyline points="16 6 12 2 8 6"/>
+                      <line x1="12" y1="2" x2="12" y2="15"/>
+                    </svg>
+                    Share
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* ══════ REPORT ══════ */}
       {modal === "report" && (
@@ -729,4 +812,4 @@ export default function ProfilePage() {
       )}
     </div>
   );
-    }
+   }
